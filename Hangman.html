@@ -6,51 +6,60 @@
 <style>
   body {
     background-color: black;
-    color: #00ff66; /* Commodore 64–like green */
+    color: #00ff40; /* Commodore PET green */
     font-family: "Courier New", monospace;
     text-transform: uppercase;
+    margin: 0;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden;
   }
+
   h1 {
     text-align: center;
-    margin-top: 20px;
+    margin: 20px 0;
     font-size: 2em;
     letter-spacing: 4px;
   }
+
   #game {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     width: 80%;
     flex-grow: 1;
-    align-items: center;
   }
+
   #hook {
     white-space: pre;
-    font-size: 1em;
+    font-size: 0.9em;
+    width: 45%;
   }
+
   #word {
+    width: 45%;
+    text-align: center;
     font-size: 2em;
     letter-spacing: 0.5em;
   }
-  #guesses {
-    border: 2px solid #00ff66;
-    padding: 10px;
-    width: 60%;
-    text-align: center;
-    font-size: 1.5em;
-    margin-bottom: 20px;
-  }
+
   #bottom {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+    width: 80%;
+    border: 2px solid #00ff40;
+    text-align: center;
+    padding: 10px;
     margin-bottom: 20px;
+    font-size: 1.5em;
+    min-height: 40px;
+  }
+
+  .blink {
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
   }
 </style>
 </head>
@@ -60,43 +69,46 @@
     <pre id="hook">
      _______
     |/      |
-    |      
-    |      
-    |       
-    |      
+    |
+    |
+    |
+    |
     |
    _|___
     </pre>
     <div id="word"></div>
   </div>
-  <div id="bottom">
-    <div id="guesses">TYPE A LETTER...</div>
-  </div>
+  <div id="bottom">TYPE A LETTER...</div>
 
 <script>
-  const words = ["COMPUTER", "KEYBOARD", "COMMODORE", "PROGRAM", "RETRO", "TERMINAL"];
-  const secret = words[Math.floor(Math.random() * words.length)];
-  const guessed = new Set();
-  const wordEl = document.getElementById("word");
-  const guessesEl = document.getElementById("guesses");
-  const hookEl = document.getElementById("hook");
+  const words = [
+    "ANOTHER","BECAUSE","BETWEEN","WITHOUT","THROUGH","POSSIBLE","IMPORTANT","DIFFERENT","COMPANY","STUDENT",
+    "COUNTRY","PROBLEM","PROGRAM","COMPUTER","KEYBOARD","INTERNET","TEACHER","FAMILY","FRIENDS","SERVICE",
+    "MORNING","AFTERNOON","EVENING","HISTORY","LANGUAGE","QUESTION","ANSWERED","COMMUNITY","SOFTWARE","BUILDING",
+    "EXAMPLE","STRUCTURE","HOSPITAL","EVIDENCE","FUNCTION","GUIDANCE","IDENTITY","JOURNAL","MAINTAIN","BALANCE",
+    "CAPACITY","DIRECTION","OPERATION","PATIENTS","RELEVANT","SCHEDULE","ULTIMATE","VACATION","WEBSITE","YESTERDAY",
+    "WRITING","ANALYSIS","BASEBALL","BIRTHDAY","COLLEGE","DECISION","DISCOVER","ECONOMY","ELEPHANT","FOOTBALL","HOLIDAY",
+    "LIBRARY","MANAGER","MATERIAL","NEWSPAPER","PLASTIC","POLICIES","POSITION","PRACTICE","PRODUCE","PROJECT","PURPOSE",
+    "RECORDS","RESEARCH","RESIDENT","RESPECTS","SOCIETY","SUPPORT","TELEPHONE","TELEVISION","TOMORROW","TRAINING","UNIVERSE",
+    "VEHICLE","WEATHER","WEEKEND","WILDLIFE","WORKERS","WRITTEN","DANGEROUS","FORGIVEN","HAPPENED","MEANINGS","OPINIONS","PASSENGER",
+    "REASONED","RELATION","TRIANGLE","TREATING","VISITING","WELCOME","YOURSELF","ZOOLOGY","AIRPLANE","FREEDOM"
+  ];
 
-  let wrong = 0;
-  const stages = [
+  const hookStages = [
 `     _______
     |/      |
-    |      
-    |      
-    |       
-    |      
+    |
+    |
+    |
+    |
     |
    _|___`,
 `     _______
     |/      |
     |      ( )
-    |      
-    |       
-    |      
+    |
+    |
+    |
     |
    _|___`,
 `     _______
@@ -104,7 +116,7 @@
     |      ( )
     |       |
     |       |
-    |      
+    |
     |
    _|___`,
 `     _______
@@ -112,7 +124,7 @@
     |      ( )
     |      /|
     |       |
-    |      
+    |
     |
    _|___`,
 `     _______
@@ -120,7 +132,7 @@
     |      ( )
     |      /|\\
     |       |
-    |      
+    |
     |
    _|___`,
 `     _______
@@ -128,7 +140,7 @@
     |      ( )
     |      /|\\
     |       |
-    |      / 
+    |      /
     |
    _|___`,
 `     _______
@@ -141,46 +153,69 @@
    _|___`
   ];
 
+  let secret = words[Math.floor(Math.random() * words.length)];
+  let guessed = new Set();
+  let wrong = 0;
+
+  const wordEl = document.getElementById("word");
+  const hookEl = document.getElementById("hook");
+  const bottomEl = document.getElementById("bottom");
+
   function updateWord() {
-    wordEl.textContent = secret
-      .split("")
-      .map(l => guessed.has(l) ? l : "_")
-      .join(" ");
+    const display = secret.split("").map(ch => guessed.has(ch) ? ch : "_").join(" ");
+    wordEl.textContent = display;
   }
 
   function updateHook() {
-    hookEl.textContent = stages[wrong];
+    hookEl.textContent = hookStages[wrong];
   }
 
-  function checkWin() {
+  function showMessage(msg) {
+    bottomEl.textContent = msg;
+  }
+
+  function checkGameState() {
     if (secret.split("").every(l => guessed.has(l))) {
-      guessesEl.textContent = "YOU WIN!";
+      showMessage("YOU WIN! PRESS ENTER FOR NEW GAME");
       document.removeEventListener("keydown", handleKey);
-    } else if (wrong >= stages.length - 1) {
-      guessesEl.textContent = `GAME OVER! WORD: ${secret}`;
-      updateHook();
+      document.addEventListener("keydown", restartOnEnter);
+    } else if (wrong >= hookStages.length - 1) {
+      showMessage(`GAME OVER! WORD WAS ${secret}. PRESS ENTER TO RESTART`);
+      hookEl.textContent = hookStages[wrong];
       document.removeEventListener("keydown", handleKey);
+      document.addEventListener("keydown", restartOnEnter);
     }
   }
 
   function handleKey(e) {
     const letter = e.key.toUpperCase();
-    if (letter.match(/[A-Z]/) && letter.length === 1) {
-      if (!guessed.has(letter)) {
-        guessed.add(letter);
-        if (!secret.includes(letter)) {
-          wrong++;
-          updateHook();
-        }
-        updateWord();
-        guessesEl.textContent = [...guessed].join(" ");
-        checkWin();
-      }
+    if (!/^[A-Z]$/.test(letter)) return;
+    if (guessed.has(letter)) return;
+    guessed.add(letter);
+
+    if (!secret.includes(letter)) wrong++;
+    updateHook();
+    updateWord();
+    showMessage([...guessed].join(" "));
+    checkGameState();
+  }
+
+  function restartOnEnter(e) {
+    if (e.key === "Enter") {
+      secret = words[Math.floor(Math.random() * words.length)];
+      guessed.clear();
+      wrong = 0;
+      updateHook();
+      updateWord();
+      showMessage("TYPE A LETTER...");
+      document.removeEventListener("keydown", restartOnEnter);
+      document.addEventListener("keydown", handleKey);
     }
   }
 
-  updateWord();
   updateHook();
+  updateWord();
+  showMessage("TYPE A LETTER...");
   document.addEventListener("keydown", handleKey);
 </script>
 </body>

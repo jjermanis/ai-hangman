@@ -1,9 +1,10 @@
 Create a single-page app in a single HTML file with the following requirements:
 - Name: Hangman
 - Goal: guess all the hidden letters in the secret word
-- the UI is monochrome: black and green. The color are like a Commodore 64 from 1979
+- the UI is monochrome: black and green. The color are like a Commodore PET from 1979
 - all letters that are printed are in upper case
-- the top of the screen is centered as says HANGMAN
-- at the left of the screen is a hangman's hook
-- at the right are where the hidden letters are shown. Each hidden letter is shown as an underline.
+- the top of the screen is centered and says HANGMAN
+- the left of the screen is a hangman's hook
+- the right are where the hidden letters are shown. Each hidden letter is shown as an underline.
 - there is a box at the bottom of the screen. When letters are guessed, you see the letter in the box.
+- there should be a list of 100 different words that the game uses for the player to guess. For each game, the word is chosen randomly. All words must be between 6 to 10 characters long. All words must each have at least 5 different letters. All words must be among the top 5000 most commonly used words in English. All words must use United States style spelling. 
