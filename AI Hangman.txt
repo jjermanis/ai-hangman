@@ -1,0 +1,9 @@
+Create a single-page app in a single HTML file with the following requirements:
+- Name: Hangman
+- Goal: guess all the hidden letters in the secret word
+- the UI is monochrome: black and green. The color are like a Commodore 64 from 1979
+- all letters that are printed are in upper case
+- the top of the screen is centered as says HANGMAN
+- at the left of the screen is a hangman's hook
+- at the right are where the hidden letters are shown. Each hidden letter is shown as an underline.
+- there is a box at the bottom of the screen. When letters are guessed, you see the letter in the box.

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HANGMAN</title>
+<style>
+  body {
+    background-color: black;
+    color: #00ff66; /* Commodore 64–like green */
+    font-family: "Courier New", monospace;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+  }
+  h1 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 2em;
+    letter-spacing: 4px;
+  }
+  #game {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+    flex-grow: 1;
+    align-items: center;
+  }
+  #hook {
+    white-space: pre;
+    font-size: 1em;
+  }
+  #word {
+    font-size: 2em;
+    letter-spacing: 0.5em;
+  }
+  #guesses {
+    border: 2px solid #00ff66;
+    padding: 10px;
+    width: 60%;
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+  #bottom {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+  <h1>HANGMAN</h1>
+  <div id="game">
+    <pre id="hook">
+     _______
+    |/      |
+    |      
+    |      
+    |       
+    |      
+    |
+   _|___
+    </pre>
+    <div id="word"></div>
+  </div>
+  <div id="bottom">
+    <div id="guesses">TYPE A LETTER...</div>
+  </div>
+
+<script>
+  const words = ["COMPUTER", "KEYBOARD", "COMMODORE", "PROGRAM", "RETRO", "TERMINAL"];
+  const secret = words[Math.floor(Math.random() * words.length)];
+  const guessed = new Set();
+  const wordEl = document.getElementById("word");
+  const guessesEl = document.getElementById("guesses");
+  const hookEl = document.getElementById("hook");
+
+  let wrong = 0;
+  const stages = [
+`     _______
+    |/      |
+    |      
+    |      
+    |       
+    |      
+    |
+   _|___`,
+`     _______
+    |/      |
+    |      ( )
+    |      
+    |       
+    |      
+    |
+   _|___`,
+`     _______
+    |/      |
+    |      ( )
+    |       |
+    |       |
+    |      
+    |
+   _|___`,
+`     _______
+    |/      |
+    |      ( )
+    |      /|
+    |       |
+    |      
+    |
+   _|___`,
+`     _______
+    |/      |
+    |      ( )
+    |      /|\\
+    |       |
+    |      
+    |
+   _|___`,
+`     _______
+    |/      |
+    |      ( )
+    |      /|\\
+    |       |
+    |      / 
+    |
+   _|___`,
+`     _______
+    |/      |
+    |      ( )
+    |      /|\\
+    |       |
+    |      / \\
+    |
+   _|___`
+  ];
+
+  function updateWord() {
+    wordEl.textContent = secret
+      .split("")
+      .map(l => guessed.has(l) ? l : "_")
+      .join(" ");
+  }
+
+  function updateHook() {
+    hookEl.textContent = stages[wrong];
+  }
+
+  function checkWin() {
+    if (secret.split("").every(l => guessed.has(l))) {
+      guessesEl.textContent = "YOU WIN!";
+      document.removeEventListener("keydown", handleKey);
+    } else if (wrong >= stages.length - 1) {
+      guessesEl.textContent = `GAME OVER! WORD: ${secret}`;
+      updateHook();
+      document.removeEventListener("keydown", handleKey);
+    }
+  }
+
+  function handleKey(e) {
+    const letter = e.key.toUpperCase();
+    if (letter.match(/[A-Z]/) && letter.length === 1) {
+      if (!guessed.has(letter)) {
+        guessed.add(letter);
+        if (!secret.includes(letter)) {
+          wrong++;
+          updateHook();
+        }
+        updateWord();
+        guessesEl.textContent = [...guessed].join(" ");
+        checkWin();
+      }
+    }
+  }
+
+  updateWord();
+  updateHook();
+  document.addEventListener("keydown", handleKey);
+</script>
+</body>
+</html>
