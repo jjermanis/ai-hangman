@@ -1,0 +1,27 @@
+version 1	8 minute dev	<1 minute code gen	9 minute test		18 minutes total
+
+Notes v1: there are a lot of elements present that I did not specify. The initial game was playable
+as-is. 
+
+
+version 2	4 minute dev	<1 minute code gen	6 minute test		29 minutes total
+
+Issues changed: apparent typo. Says Commodore 64. Intended is Commodore PET.
+Issues changed: There are only 6-ish words. I want to add rules for the types of words that can be chosen.
+Notes v2: The UI has changed a bit more than expected. I wouldn't expect the 64->PET name change to 
+do something like that. For sure I wouldn't expect the word list to affect the UI. Changes are not
+massive, but they're not subtle either. There are blocks around the hang post, the word you're guessing,
+and the letters you have guessed. The guess has a block AND each letter has a block. I think I need to
+be specific about this. It does do the guessed letters in alphabetical order, which I do like.
+This also added "press enter to play again" which I like... without prompt mind you.
+2nd word was LONGERTHA! That for sure is not a top 5000 word... or a word at all?
+
+
+version 3	11 minute dev	3 minute code gen	6 minute test		49 minutes total
+
+Issues changed: a lot! I did a restart of the ChatGPT session. I need to add a lot of detail to
+get it back to the original look. For truly new details, I ask for guessed letters to be shown
+in alphabetical order, and to better lay out the guess letters.
+There are some changes to make, but this is very close.
+
+TODO the hidden letter spots move on correct guesses. I'd like them to stay in place.

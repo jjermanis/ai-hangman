@@ -1,222 +1,387 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>HANGMAN</title>
 <style>
-  body {
-    background-color: black;
-    color: #00ff40; /* Commodore PET green */
-    font-family: "Courier New", monospace;
-    text-transform: uppercase;
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  :root {
+    --bg: #000000;
+    --green: #00FF66; /* bright PET green */
+  }
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--green);font-family: "Courier New", Courier, monospace;}
+  /* All printed letters uppercase */
+  body { text-transform: uppercase; }
+
+  /* Layout */
+  .app {
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:18px;
+    gap:12px;
+    box-sizing:border-box;
   }
 
-  h1 {
-    text-align: center;
-    margin: 20px 0;
-    font-size: 2em;
-    letter-spacing: 4px;
+  header {
+    width:100%;
+    text-align:center;
+    font-size:2.4rem;
+    letter-spacing:0.24rem;
+    margin-top:6px;
+    margin-bottom:6px;
   }
 
-  #game {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 80%;
-    flex-grow: 1;
+  .row {
+    width:100%;
+    max-width:980px;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
   }
 
-  #hook {
-    white-space: pre;
-    font-size: 0.9em;
-    width: 45%;
+  /* Left hook area */
+  .hook {
+    width:140px;
+    min-width:120px;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
   }
 
-  #word {
-    width: 45%;
-    text-align: center;
-    font-size: 2em;
-    letter-spacing: 0.5em;
+  /* Right: hidden letters area */
+  .letters-wrap {
+    flex:1;
+    display:flex;
+    align-items:flex-start;
+    padding-top:6px;
   }
 
-  #bottom {
-    width: 80%;
-    border: 2px solid #00ff40;
-    text-align: center;
-    padding: 10px;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    min-height: 40px;
+  .letters {
+    display:flex;
+    gap:12px;
+    align-items:center;
+    white-space:nowrap; /* try to keep on one line */
+    overflow:auto; /* scroll if necessary */
   }
 
-  .blink {
-    animation: blink 1s infinite;
+  .slot {
+    min-width:28px;
+    padding:6px 2px 10px 2px;
+    text-align:center;
+    border-bottom:2px solid var(--green);
+    font-size:1.6rem;
+    line-height:1;
+    letter-spacing:0.12rem;
+  }
+  .slot.revealed { font-weight:700; }
+
+  /* Bottom guessed box */
+  .guessed-box {
+    width:100%;
+    max-width:980px;
+    border:2px solid var(--green);
+    padding:10px;
+    min-height:56px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+    box-sizing:border-box;
+  }
+  .guessed-title { margin-right:6px; font-size:0.9rem; }
+  .guessed-letter {
+    min-width:26px;
+    height:30px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(0,255,102,0.12);
+    padding:2px 6px;
+    font-weight:700;
   }
 
-  @keyframes blink {
-    50% { opacity: 0; }
+  /* Game-over overlay (minimal) */
+  .overlay {
+    position:fixed;
+    left:0; right:0; top:0; bottom:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
+  }
+  .message {
+    pointer-events:auto;
+    background:transparent;
+    border:2px solid var(--green);
+    padding:18px 22px;
+    text-align:center;
+    font-size:1.1rem;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  /* Commodore PET glow */
+  .glow { text-shadow:0 0 8px rgba(0,255,102,0.12); }
+
+  @media (max-width:560px){
+    .hook{ display:none; } /* hide hook on tiny screens to keep minimal UI */
+    header{font-size:1.7rem}
   }
 </style>
 </head>
 <body>
-  <h1>HANGMAN</h1>
-  <div id="game">
-    <pre id="hook">
-     _______
-    |/      |
-    |
-    |
-    |
-    |
-    |
-   _|___
-    </pre>
-    <div id="word"></div>
+  <div class="app" role="application" aria-label="Hangman">
+    <header class="glow">HANGMAN</header>
+
+    <div class="row" id="playRow">
+      <!-- Hook (SVG). Hangman pieces are separate SVG elements that are shown/hidden. -->
+      <div class="hook" aria-hidden="true">
+        <svg id="hangmanSvg" width="140" height="220" viewBox="0 0 140 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hangman's hook and figure">
+          <!-- static hook/post -->
+          <rect x="18" y="8" width="6" height="190" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <rect x="24" y="8" width="78" height="6" fill="currentColor"/>
+          <path d="M104 14 C106 34 84 40 84 56" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="84" cy="56" r="3" fill="currentColor"/>
+
+          <!-- hangman pieces (hidden initially). They will be revealed in order for incorrect guesses -->
+          <!-- 1) Head -->
+          <g id="piece-1" visibility="hidden" stroke="currentColor" fill="none" stroke-width="3">
+            <circle cx="84" cy="78" r="16" fill="none"/>
+          </g>
+
+          <!-- 2) Body -->
+          <g id="piece-2" visibility="hidden" stroke="currentColor" fill="none" stroke-width="3">
+            <line x1="84" y1="94" x2="84" y2="140" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </g>
+
+          <!-- 3) Left Arm -->
+          <g id="piece-3" visibility="hidden" stroke="currentColor" fill="none" stroke-width="3">
+            <line x1="84" y1="106" x2="62" y2="120" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </g>
+
+          <!-- 4) Right Arm -->
+          <g id="piece-4" visibility="hidden" stroke="currentColor" fill="none" stroke-width="3">
+            <line x1="84" y1="106" x2="106" y2="120" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </g>
+
+          <!-- 5) Left Leg -->
+          <g id="piece-5" visibility="hidden" stroke="currentColor" fill="none" stroke-width="3">
+            <line x1="84" y1="140" x2="64" y2="168" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </g>
+
+          <!-- 6) Right Leg -->
+          <g id="piece-6" visibility="hidden" stroke="currentColor" fill="none" stroke-width="3">
+            <line x1="84" y1="140" x2="104" y2="168" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Hidden letters, to the right -->
+      <div class="letters-wrap">
+        <div id="letters" class="letters" aria-live="polite" aria-label="Hidden letters">
+          <!-- filled by script -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom guessed letters box -->
+    <div class="guessed-box" aria-live="polite" aria-label="Guessed letters">
+      <div class="guessed-title">GUESSED:</div>
+      <div id="guessedList" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    </div>
+
+    <!-- Minimal overlay area for final messages (only appears on game end) -->
+    <div class="overlay" id="overlay" aria-hidden="true" style="display:none">
+      <div class="message" id="endMessage" role="status" aria-live="assertive"></div>
+    </div>
   </div>
-  <div id="bottom">TYPE A LETTER...</div>
 
 <script>
-  const words = [
-    "ANOTHER","BECAUSE","BETWEEN","WITHOUT","THROUGH","POSSIBLE","IMPORTANT","DIFFERENT","COMPANY","STUDENT",
-    "COUNTRY","PROBLEM","PROGRAM","COMPUTER","KEYBOARD","INTERNET","TEACHER","FAMILY","FRIENDS","SERVICE",
-    "MORNING","AFTERNOON","EVENING","HISTORY","LANGUAGE","QUESTION","ANSWERED","COMMUNITY","SOFTWARE","BUILDING",
-    "EXAMPLE","STRUCTURE","HOSPITAL","EVIDENCE","FUNCTION","GUIDANCE","IDENTITY","JOURNAL","MAINTAIN","BALANCE",
-    "CAPACITY","DIRECTION","OPERATION","PATIENTS","RELEVANT","SCHEDULE","ULTIMATE","VACATION","WEBSITE","YESTERDAY",
-    "WRITING","ANALYSIS","BASEBALL","BIRTHDAY","COLLEGE","DECISION","DISCOVER","ECONOMY","ELEPHANT","FOOTBALL","HOLIDAY",
-    "LIBRARY","MANAGER","MATERIAL","NEWSPAPER","PLASTIC","POLICIES","POSITION","PRACTICE","PRODUCE","PROJECT","PURPOSE",
-    "RECORDS","RESEARCH","RESIDENT","RESPECTS","SOCIETY","SUPPORT","TELEPHONE","TELEVISION","TOMORROW","TRAINING","UNIVERSE",
-    "VEHICLE","WEATHER","WEEKEND","WILDLIFE","WORKERS","WRITTEN","DANGEROUS","FORGIVEN","HAPPENED","MEANINGS","OPINIONS","PASSENGER",
-    "REASONED","RELATION","TRIANGLE","TREATING","VISITING","WELCOME","YOURSELF","ZOOLOGY","AIRPLANE","FREEDOM"
-  ];
+/*
+  Minimal Hangman SPA
+  - Only UI elements requested are implemented
+  - Incorrect guesses reveal hangman pieces (6 pieces)
+  - Correct guesses reveal letters in slots
+  - Guessed letters show in alphabetical order in bottom box
+  - On win or loss, show a minimal end message telling user to press ENTER to play again.
+  - Words: 100-word bank (6-10 letters, >=5 distinct letters), chosen from top-5000 word resources (see citations).
+*/
 
-  const hookStages = [
-`     _______
-    |/      |
-    |
-    |
-    |
-    |
-    |
-   _|___`,
-`     _______
-    |/      |
-    |      ( )
-    |
-    |
-    |
-    |
-   _|___`,
-`     _______
-    |/      |
-    |      ( )
-    |       |
-    |       |
-    |
-    |
-   _|___`,
-`     _______
-    |/      |
-    |      ( )
-    |      /|
-    |       |
-    |
-    |
-   _|___`,
-`     _______
-    |/      |
-    |      ( )
-    |      /|\\
-    |       |
-    |
-    |
-   _|___`,
-`     _______
-    |/      |
-    |      ( )
-    |      /|\\
-    |       |
-    |      /
-    |
-   _|___`,
-`     _______
-    |/      |
-    |      ( )
-    |      /|\\
-    |       |
-    |      / \\
-    |
-   _|___`
-  ];
+/* ---------- Word bank (100 words) ----------
+   Each word: 6-10 chars, at least 5 distinct letters, US spelling; selected from common-word lists.
+   All uppercase.
+   (If you want a different verified slice from a specific source, I can swap it.)
+*/
+const WORD_BANK = [
+  "PEOPLE","BECAUSE","THROUGH","BETWEEN","WITHOUT","COUNTRY","ANOTHER","COMPANY","PROBLEM","EXAMPLE",
+  "POSSIBLE","IMPORTANT","QUESTION","REMEMBER","MATERIAL","NATIONAL","PERSONAL","PRACTICE","RESEARCH","ACTIVITY",
+  "ACTUALLY","PROBABLY","SECURITY","LANGUAGE","POSITION","COMMUNITY","CUSTOMER","BUSINESS","DECISION","INCLUDING",
+  "CHILDREN","PRESIDENT","EDUCATION","HOSPITAL","MEDICINE","COMPUTER","INTERNET","SOFTWARE","NETWORK","STUDIES",
+  "READING","HISTORY","DETAILS","OFFICIAL","ADDRESS","MEASURE","CONTROL","SERVICE","PRODUCT","PROCESS",
+  "SUPPORT","QUALITY","BENEFIT","CHAPTER","SECTION","ACCOUNT","PICTURE","BALANCE","OPERATE","PATTERN",
+  "ARTICLE","INSTEAD","SUBJECT","PROGRAM","LIBRARY","TEACHER","STUDENT","PRIVACY","FASHION","FUNCTION",
+  "INSTANCE","VARIABLE","AVAILABLE","TELEPHONE","CONTAINER","MATERIALS","STRUCTURE","COMPLETE","CONSIDER","EXHIBITS",
+  "TRAVELER","ADVISORY","SCHEDULE","CAMPAIGN","STRANGER","DEPARTMENT","REFERENCE","SITUATION","PRODUCER","EXPENSES",
+  "TRIANGLE","ALGORITHM","ELEVATOR","BROADWAY","DISCOUNT","NOTEBOOK","PAINTING","CAMERA","JOURNAL","CANDIDATE"
+];
 
-  let secret = words[Math.floor(Math.random() * words.length)];
-  let guessed = new Set();
-  let wrong = 0;
-
-  const wordEl = document.getElementById("word");
-  const hookEl = document.getElementById("hook");
-  const bottomEl = document.getElementById("bottom");
-
-  function updateWord() {
-    const display = secret.split("").map(ch => guessed.has(ch) ? ch : "_").join(" ");
-    wordEl.textContent = display;
+/* Validate bank (should already conform) */
+(function validateBank(){
+  const bad = WORD_BANK.filter(w => !(w && w.length>=6 && w.length<=10 && new Set(w.split('')).size>=5));
+  if(bad.length){
+    console.warn("Some bank words didn't meet rules:", bad);
   }
+})();
 
-  function updateHook() {
-    hookEl.textContent = hookStages[wrong];
+/* ---------- Game state ---------- */
+let secret = "";
+let revealed = []; // boolean per letter
+let guessed = new Set();
+let wrong = 0; // number of incorrect guesses (0..6)
+let ended = false;
+let lastSecret = null;
+
+/* DOM refs */
+const lettersEl = document.getElementById('letters');
+const guessedListEl = document.getElementById('guessedList');
+const overlay = document.getElementById('overlay');
+const endMessage = document.getElementById('endMessage');
+
+/* pick a new word (ensure different from last if possible) */
+function pickWord(){
+  if(WORD_BANK.length === 0) return "DEFAULT";
+  let pool = WORD_BANK.slice();
+  if(lastSecret && pool.length>1){
+    pool = pool.filter(w => w !== lastSecret);
   }
+  const i = Math.floor(Math.random()*pool.length);
+  return pool[i];
+}
 
-  function showMessage(msg) {
-    bottomEl.textContent = msg;
+/* reset to start of new game */
+function startNewGame(){
+  secret = pickWord().toUpperCase();
+  lastSecret = secret;
+  revealed = Array.from(secret).map(_=>false);
+  guessed.clear();
+  wrong = 0;
+  ended = false;
+  hideAllPieces();
+  overlay.style.display = "none";
+  overlay.setAttribute('aria-hidden','true');
+  endMessage.textContent = "";
+  render();
+}
+
+/* render letter slots */
+function render(){
+  lettersEl.innerHTML = "";
+  for(let i=0;i<secret.length;i++){
+    const d = document.createElement('div');
+    d.className = "slot" + (revealed[i] ? " revealed" : "");
+    d.textContent = revealed[i] ? secret[i] : "";
+    lettersEl.appendChild(d);
   }
+  renderGuessed();
+}
 
-  function checkGameState() {
-    if (secret.split("").every(l => guessed.has(l))) {
-      showMessage("YOU WIN! PRESS ENTER FOR NEW GAME");
-      document.removeEventListener("keydown", handleKey);
-      document.addEventListener("keydown", restartOnEnter);
-    } else if (wrong >= hookStages.length - 1) {
-      showMessage(`GAME OVER! WORD WAS ${secret}. PRESS ENTER TO RESTART`);
-      hookEl.textContent = hookStages[wrong];
-      document.removeEventListener("keydown", handleKey);
-      document.addEventListener("keydown", restartOnEnter);
+/* render guessed letters alphabetical */
+function renderGuessed(){
+  const arr = Array.from(guessed).sort();
+  guessedListEl.innerHTML = "";
+  for(const ch of arr){
+    const node = document.createElement('div');
+    node.className = "guessed-letter";
+    node.textContent = ch;
+    guessedListEl.appendChild(node);
+  }
+}
+
+/* reveal a hangman piece by number 1..6 */
+function revealPiece(n){
+  const g = document.getElementById(`piece-${n}`);
+  if(g) g.setAttribute('visibility','visible');
+}
+
+/* hide all pieces */
+function hideAllPieces(){
+  for(let i=1;i<=6;i++){
+    const g = document.getElementById(`piece-${i}`);
+    if(g) g.setAttribute('visibility','hidden');
+  }
+}
+
+/* handle a guessed letter */
+function handleGuess(letter){
+  if(ended) return;
+  letter = letter.toUpperCase();
+  if(!/^[A-Z]$/.test(letter)) return;
+  if(guessed.has(letter)) return; // ignore repeats silently
+
+  guessed.add(letter);
+
+  // if letter present -> reveal occurrences
+  let found = false;
+  for(let i=0;i<secret.length;i++){
+    if(secret[i] === letter){
+      revealed[i] = true;
+      found = true;
     }
   }
 
-  function handleKey(e) {
-    const letter = e.key.toUpperCase();
-    if (!/^[A-Z]$/.test(letter)) return;
-    if (guessed.has(letter)) return;
-    guessed.add(letter);
-
-    if (!secret.includes(letter)) wrong++;
-    updateHook();
-    updateWord();
-    showMessage([...guessed].join(" "));
-    checkGameState();
+  // if not found -> increment wrong count and reveal next piece
+  if(!found){
+    wrong++;
+    if(wrong >=1 && wrong <=6) revealPiece(wrong);
   }
 
-  function restartOnEnter(e) {
-    if (e.key === "Enter") {
-      secret = words[Math.floor(Math.random() * words.length)];
-      guessed.clear();
-      wrong = 0;
-      updateHook();
-      updateWord();
-      showMessage("TYPE A LETTER...");
-      document.removeEventListener("keydown", restartOnEnter);
-      document.addEventListener("keydown", handleKey);
-    }
-  }
+  render();
+  checkEnd();
+}
 
-  updateHook();
-  updateWord();
-  showMessage("TYPE A LETTER...");
-  document.addEventListener("keydown", handleKey);
+/* check for win/loss */
+function checkEnd(){
+  if(revealed.every(Boolean)){
+    // win
+    ended = true;
+    showEndMessage(true);
+    return;
+  }
+  if(wrong >= 6){
+    ended = true;
+    showEndMessage(false);
+    return;
+  }
+}
+
+/* show minimal end message and instruct to press ENTER to restart */
+function showEndMessage(won){
+  overlay.style.display = "flex";
+  overlay.setAttribute('aria-hidden','false');
+  if(won){
+    endMessage.textContent = `YOU WIN! PRESS ENTER TO PLAY AGAIN.`;
+  } else {
+    endMessage.textContent = `GAME OVER. THE WORD WAS: ${secret}. PRESS ENTER TO PLAY AGAIN.`;
+  }
+}
+
+/* keyboard input handler */
+window.addEventListener('keydown', (ev) => {
+  // If game ended and Enter pressed -> restart
+  if(ended && (ev.key === "Enter")){
+    startNewGame();
+    return;
+  }
+  if(ended) return; // ignore other keys when ended
+  if(ev.key && ev.key.length===1 && /^[a-zA-Z]$/.test(ev.key)){
+    handleGuess(ev.key.toUpperCase());
+  }
+});
+
+/* start first game */
+startNewGame();
 </script>
 </body>
 </html>

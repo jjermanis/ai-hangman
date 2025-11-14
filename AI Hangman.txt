@@ -4,7 +4,12 @@ Create a single-page app in a single HTML file with the following requirements:
 - the UI is monochrome: black and green. The color are like a Commodore PET from 1979
 - all letters that are printed are in upper case
 - the top of the screen is centered and says HANGMAN
-- the left of the screen is a hangman's hook
-- the right are where the hidden letters are shown. Each hidden letter is shown as an underline.
-- there is a box at the bottom of the screen. When letters are guessed, you see the letter in the box.
+- at the left of the screen is a hangman's hook
+- to  the right of the hangman's hook are where the hidden letters are shown. Each hidden letter is shown as an underline. The hidden letters should be shown on the same line, whenever possible.
+- there is a box at the bottom of the screen. When letters are guessed, you see the letter in the box. All the letters that have been guessed are shown in that box. The letters that have been guessed are shown in alphabetical order.
+- when a player guesses a letter, add a piece to the hangman's hook. There are 6 pieces: head, body, left arm, right arm, left leg, and right leg.
+- when all 6 pieces are added, the game is over. Tell the user the game is over, and what the correct word is.
+- when the user guesses all the letters in the word, the game is over. Tell them that they won!
+- when the game is over, tell them they can hit enter to play again. Once they hit enter, it will start like the very beginning with a different word.
+- keep the UI at a minimum. Only implement the UI elements that I have asked for.
 - there should be a list of 100 different words that the game uses for the player to guess. For each game, the word is chosen randomly. All words must be between 6 to 10 characters long. All words must each have at least 5 different letters. All words must be among the top 5000 most commonly used words in English. All words must use United States style spelling. 
