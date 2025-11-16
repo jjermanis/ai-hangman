@@ -24,4 +24,13 @@ get it back to the original look. For truly new details, I ask for guessed lette
 in alphabetical order, and to better lay out the guess letters.
 There are some changes to make, but this is very close.
 
+
+version 4	6 minutes dev	3 minute code gen	3 minute test		1 hour 1 min total
+
+This was quick and easy... but minor. The lineup of the words is centered, both vertically and
+horizontally. It is good. Minor UI changes are made... it's the nature of the tool.
+
+
 TODO the hidden letter spots move on correct guesses. I'd like them to stay in place.
+TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
+	with chrono
