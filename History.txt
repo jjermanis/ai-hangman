@@ -31,6 +31,22 @@ This was quick and easy... but minor. The lineup of the words is centered, both 
 horizontally. It is good. Minor UI changes are made... it's the nature of the tool.
 
 
+version X	7 minutes dev	4 minute code gen	3 minute test		1 hour 15 min total
+
+DID NOT PROCEED - RETURNING TO VERSION 4 ON NEXT ATTEMPT
+Two changes. 1) increased words from 100 to 200. 2) move the end of the game UI below the guessed 
+letters. The initial new list had multiple bugs: words ending in 1, words with a lower-case number.
+It offered a prompt to implement with a specific library. I tried it. Before generating code, the 
+following question itself contained typos. I updated the word list to try again. It appeared to try
+it, and totally changed the UI. Reverted, and just updated the end of game UI.
+
+
+TODO increased words from 100 to 200. 
+TODO move the end of the game UI below the guessed letters.
+TODO the underlines should go away after the letter there has been guessed.
 TODO the hidden letter spots move on correct guesses. I'd like them to stay in place.
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
 	with chrono
+
+
+
