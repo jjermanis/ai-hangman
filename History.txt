@@ -41,8 +41,13 @@ following question itself contained typos. I updated the word list to try again.
 it, and totally changed the UI. Reverted, and just updated the end of game UI.
 
 
+version 5	2 minutes dev	1 minute code gen	2 minute test		1 hour 20 min total
+
+Trying more simple changes at a time. This time, just make the end of game appear below the guessed
+letters. This worked, as expected, for when player wins or loses. I will commit and move one!
+
+
 TODO increased words from 100 to 200. 
-TODO move the end of the game UI below the guessed letters.
 TODO the underlines should go away after the letter there has been guessed.
 TODO the hidden letter spots move on correct guesses. I'd like them to stay in place.
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
