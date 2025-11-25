@@ -1,289 +1,247 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="UTF-8">
 <title>HANGMAN</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-  :root{
-    --bg: #000000;
-    --green: #00FF66; /* PET-like green */
-  }
-  html,body{height:100%;margin:0;background:var(--bg);color:var(--green);font-family:"Courier New",Courier,monospace;box-sizing:border-box;}
-  /* All printed letters uppercase */
-  body { text-transform: uppercase; }
+    body {
+        background: black;
+        color: #00FF66; /* PET-green */
+        font-family: "Courier New", Courier, monospace;
+        text-transform: uppercase;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
 
-  /* App layout (minimal) */
-  .app { min-height:100%; display:flex; flex-direction:column; align-items:center; padding:18px; gap:12px; }
+    #title {
+        text-align: center;
+        font-size: 2.4rem;
+        letter-spacing: 0.25rem;
+        margin-top: 15px;
+    }
 
-  header { width:100%; text-align:center; font-size:2.6rem; letter-spacing:0.26rem; margin-top:6px; margin-bottom:6px; }
+    #main {
+        display: flex;
+        margin-top: 20px;
+        width: 100%;
+        box-sizing: border-box;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
 
-  /* Row: left hook (fixed) and right letters area (flex).
-     The hook has a fixed height so the letters row can be vertically centered between top & bottom. */
-  .row { width:100%; max-width:1100px; display:flex; gap:12px; align-items:flex-start; }
-  .hook { width:160px; min-width:120px; height:220px; display:flex; align-items:flex-start; justify-content:center; }
-  .letters-wrap { flex:1; display:flex; align-items:center; min-height:220px; justify-content:center; }
-  .letters { display:flex; gap:12px; align-items:center; white-space:nowrap; overflow:auto; }
+    #hookArea {
+        width: 180px;
+        min-width: 180px;
+        height: 260px;
+    }
 
-  .slot { min-width:28px; padding:6px 2px 10px 2px; text-align:center; border-bottom:2px solid var(--green); font-size:1.6rem; line-height:1; letter-spacing:0.12rem; }
-  .slot.revealed { font-weight:700; }
+    #lettersArea {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 260px;
+        white-space: nowrap;
+    }
 
-  /* Bottom guessed box */
-  .guessed-box { width:100%; max-width:1100px; border:2px solid var(--green); padding:10px; min-height:56px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; box-sizing:border-box; }
-  .guessed-title { margin-right:6px; font-size:0.9rem; }
-  .guessed-letter { min-width:26px; height:30px; display:inline-flex; align-items:center; justify-content:center; border:1px solid rgba(0,255,102,0.12); padding:2px 6px; font-weight:700; }
+    .slot {
+        display: inline-block;
+        min-width: 28px;
+        border-bottom: 2px solid #00FF66;
+        margin: 0 6px;
+        font-size: 1.6rem;
+        text-align: center;
+        padding-bottom: 6px;
+    }
 
-  /* End message area directly below guessed box (minimal) */
-  .endbox { width:100%; max-width:1100px; min-height:36px; color:var(--green); font-size:1rem; padding:8px 6px; box-sizing:border-box; }
+    .revealed {
+        border-bottom: none;
+        font-weight: bold;
+    }
 
-  .glow { text-shadow:0 0 6px rgba(0,255,102,0.12); }
+    #guessedBox {
+        margin: 25px auto 0 auto;
+        width: calc(100% - 40px);
+        max-width: 1100px;
+        border: 2px solid #00FF66;
+        padding: 10px;
+        min-height: 45px;
+        box-sizing: border-box;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+    }
 
-  @media (max-width:520px){
-    .hook{display:none;} /* keep minimal on tiny screens */
-    .letters-wrap { min-height:140px; align-items:center; }
-    header{font-size:1.7rem;}
-  }
+    .gLetter {
+        padding: 4px 6px;
+        border: 1px solid #007f33;
+        min-width: 22px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #endMessage {
+        margin: 15px auto 0 auto;
+        width: calc(100% - 40px);
+        max-width: 1100px;
+        min-height: 30px;
+        font-size: 1.1rem;
+    }
 </style>
 </head>
 <body>
-  <div class="app" role="application" aria-label="Hangman">
-    <header class="glow">HANGMAN</header>
 
-    <div class="row" id="playRow">
-      <!-- Hook SVG -->
-      <div class="hook" aria-hidden="true">
-        <svg id="hangmanSvg" width="140" height="220" viewBox="0 0 140 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Hangman's hook and figure">
-          <rect x="18" y="8" width="6" height="190" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-          <rect x="24" y="8" width="78" height="6" fill="currentColor"/>
-          <path d="M104 14 C106 34 84 40 84 56" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="84" cy="56" r="3" fill="currentColor"/>
+<div id="title">HANGMAN</div>
 
-          <!-- pieces (hidden initially) -->
-          <g id="piece-1" visibility="hidden" stroke="currentColor" fill="none" stroke-width="3"><circle cx="84" cy="78" r="16"/></g>
-          <g id="piece-2" visibility="hidden" stroke="currentColor" fill="none" stroke-width="3"><line x1="84" y1="94" x2="84" y2="140" stroke-linecap="round"/></g>
-          <g id="piece-3" visibility="hidden" stroke="currentColor" fill="none" stroke-width="3"><line x1="84" y1="106" x2="62" y2="120" stroke-linecap="round"/></g>
-          <g id="piece-4" visibility="hidden" stroke="currentColor" fill="none" stroke-width="3"><line x1="84" y1="106" x2="106" y2="120" stroke-linecap="round"/></g>
-          <g id="piece-5" visibility="hidden" stroke="currentColor" fill="none" stroke-width="3"><line x1="84" y1="140" x2="64" y2="168" stroke-linecap="round"/></g>
-          <g id="piece-6" visibility="hidden" stroke="currentColor" fill="none" stroke-width="3"><line x1="84" y1="140" x2="104" y2="168" stroke-linecap="round"/></g>
+<div id="main">
+    <div id="hookArea">
+        <svg width="180" height="260" stroke="#00FF66" fill="none" stroke-width="3">
+            <!-- Hook -->
+            <line x1="40" y1="10" x2="40" y2="230"/>
+            <line x1="40" y1="10" x2="120" y2="10"/>
+            <path d="M120 10 C140 35 100 45 100 70"/>
+            <circle cx="100" cy="70" r="4" fill="#00FF66"/>
+
+            <!-- Hangman pieces -->
+            <circle id="p1" cx="100" cy="95" r="18" visibility="hidden" />
+            <line id="p2" x1="100" y1="113" x2="100" y2="165" visibility="hidden"/>
+            <line id="p3" x1="100" y1="125" x2="70"  y2="145" visibility="hidden"/>
+            <line id="p4" x1="100" y1="125" x2="130" y2="145" visibility="hidden"/>
+            <line id="p5" x1="100" y1="165" x2="80"  y2="200" visibility="hidden"/>
+            <line id="p6" x1="100" y1="165" x2="120" y2="200" visibility="hidden"/>
         </svg>
-      </div>
-
-      <!-- Hidden letters area -->
-      <div class="letters-wrap" aria-hidden="false">
-        <div id="letters" class="letters" aria-live="polite" aria-label="Hidden letters"></div>
-      </div>
     </div>
 
-    <!-- Bottom guessed letters box (alphabetical) -->
-    <div class="guessed-box" aria-live="polite" aria-label="Guessed letters">
-      <div class="guessed-title">GUESSED:</div>
-      <div id="guessedList" style="display:flex;gap:6px;flex-wrap:wrap"></div>
-    </div>
+    <div id="lettersArea"></div>
+</div>
 
-    <!-- End message area (below guessed box): win/lose and press ENTER to play again -->
-    <div class="endbox" id="endBox" aria-live="assertive" role="status"></div>
-  </div>
+<div id="guessedBox"></div>
+<div id="endMessage"></div>
 
 <script>
-/*
-  Hangman SPA (single HTML file)
-
-  Runtime behavior:
-  - Fetches a public top-5000 plain-text word list (mirror) and extracts candidate words.
-    Source used (public raw list): https://raw.githubusercontent.com/MichaelWehar/Public-Domain-Word-Lists/master/5000-more-common.txt
-    If the fetch fails or not enough candidates, the app falls back to a small embedded list so the game still works.
-  - Filters words to meet constraints:
-    * Only letters A-Z (no digits/punctuation)
-    * Length 6..10
-    * At least 5 distinct letters
-    * Uppercased for play
-  - Selects 100 unique words randomly for the game's bank.
-  - Minimal UI per your spec. No extra controls.
-*/
-
-/* URL of public plain-text top-5000 word list (mirror) */
-const TOP5000_RAW = "https://raw.githubusercontent.com/MichaelWehar/Public-Domain-Word-Lists/master/5000-more-common.txt";
-
-/* Utility: check constraints */
-function meetsConstraints(w){
-  if(!w || typeof w!=='string') return false;
-  if(!/^[A-Za-z]+$/.test(w)) return false; // letters only
-  if(w.length < 6 || w.length > 10) return false;
-  const distinct = new Set(w.toUpperCase().split('')).size;
-  return distinct >= 5;
-}
-
-/* Shuffle */
-function shuffle(a){
-  for(let i=a.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [a[i],a[j]] = [a[j],a[i]];
-  }
-}
-
-/* Embedded fallback word bank (100 words) used if fetch fails */
-const FALLBACK_BANK = [
-  "PEOPLE","BECAUSE","THROUGH","BETWEEN","WITHOUT","COUNTRY","ANOTHER","COMPANY","PROBLEM","EXAMPLE",
-  "POSSIBLE","IMPORTANT","QUESTION","REMEMBER","MATERIAL","NATIONAL","PERSONAL","PRACTICE","RESEARCH","ACTIVITY",
-  "ACTUALLY","PROBABLY","SECURITY","LANGUAGE","POSITION","COMMUNITY","CUSTOMER","BUSINESS","DECISION","INCLUDING",
-  "CHILDREN","PRESIDENT","EDUCATION","HOSPITAL","MEDICINE","COMPUTER","INTERNET","SOFTWARE","NETWORK","STUDIES",
-  "READING","HISTORY","DETAILS","OFFICIAL","ADDRESS","MEASURE","CONTROL","SERVICE","PRODUCT","PROCESS",
-  "SUPPORT","QUALITY","BENEFIT","CHAPTER","SECTION","ACCOUNT","PICTURE","BALANCE","OPERATE","PATTERN",
-  "ARTICLE","INSTEAD","SUBJECT","PROGRAM","LIBRARY","TEACHER","STUDENT","PRIVACY","FASHION","FUNCTION",
-  "INSTANCE","VARIABLE","AVAILABLE","TELEPHONE","CONTAINER","MATERIALS","STRUCTURE","COMPLETE","CONSIDER","EXHIBITS",
-  "TRAVELER","ADVISORY","SCHEDULE","CAMPAIGN","STRANGER","DEPARTMENT","REFERENCE","SITUATION","PRODUCER","EXPENSES",
-  "TRIANGLE","ALGORITHM","ELEVATOR","BROADWAY","DISCOUNT","NOTEBOOK","PAINTING","CAMERA","JOURNAL","CANDIDATE"
+/* ------------------------------
+   100 COMMON, 6–10 LETTER WORDS
+   ------------------------------ */
+const WORDS = [
+"ACCOUNT","ACQUIRE","ADDRESS","ADVANCE","AFFAIR","AMOUNT","ANALYST","ANCIENT","ANXIETY","ARTICLE",
+"BALANCE","BARRIER","BATTERY","BEHAVIOR","BENEATH","BENEFIT","BORDERS","BROTHER","CABINET","CAPTURE",
+"CARRIER","CENTRAL","CERTAIN","CHAMBER","CHAPTER","CHARITY","CITIZEN","COLLEGE","COMFORT","COMMAND",
+"COMPANY","CONCEPT","CONCERN","CONFIRM","CONSUME","CONTRACT","CORRECT","CREATOR","CURRENT","DAMAGE",
+"DANGEROUS","DEGREE","DELIGHT","DELIVER","DEMAND","DEPART","DISCUSS","DISCOVER","DISPLAY","DISTANT",
+"DRAINAGE","EDUCATE","ELECTION","ELEMENT","EMERGE","ENJOYED","EXAMPLE","EXCITED","EXPLAIN","FACTORY",
+"FASHION","FEATURE","FICTION","FOREIGN","FORWARD","FORTUNE","FOUNDATION","FUNCTION","GALLERY","GENTLE",
+"HARMONY","HELPFUL","HOLIDAY","HOSPITAL","IMPROVE","INCLUDE","INITIAL","INQUIRY","INSIGHT","JOURNAL",
+"KITCHEN","LANGUAGE","MATERIAL","MEASURE","MESSAGE","MINIMAL","NATURAL","OFFICER","PACKAGE","PERHAPS",
+"QUALITY","RAILWAY","RECEIVE","SCIENCE","SECTION","STATION","TEACHER","THEATER","WEATHER","WITHOUT"
 ];
 
-/* Game state */
-let BANK = [];      // 100-word bank used for game
-let secret = "";    // uppercase secret
-let revealed = [];  // booleans
+/* State */
+let secret = "";
+let revealed = [];
 let guessed = new Set();
-let wrong = 0;      // wrong guesses (0..6)
+let wrong = 0;
 let ended = false;
-let lastSecret = null;
 
-/* DOM refs */
-const lettersEl = document.getElementById('letters');
-const guessedListEl = document.getElementById('guessedList');
-const endBox = document.getElementById('endBox');
+/* DOM */
+const lettersArea = document.getElementById("lettersArea");
+const guessedBox   = document.getElementById("guessedBox");
+const endMessage   = document.getElementById("endMessage");
 
-/* Show/hide hangman piece */
-function revealPiece(n){ const g = document.getElementById(`piece-${n}`); if(g) g.setAttribute('visibility','visible'); }
-function hideAllPieces(){ for(let i=1;i<=6;i++){ const g=document.getElementById(`piece-${i}`); if(g) g.setAttribute('visibility','hidden'); } }
+/* Hangman SVG parts */
+const parts = [
+    document.getElementById("p1"),
+    document.getElementById("p2"),
+    document.getElementById("p3"),
+    document.getElementById("p4"),
+    document.getElementById("p5"),
+    document.getElementById("p6")
+];
 
-/* Render slots */
-function render(){
-  lettersEl.innerHTML = "";
-  for(let i=0;i<secret.length;i++){
-    const slot = document.createElement('div');
-    slot.className = 'slot' + (revealed[i] ? ' revealed' : '');
-    slot.textContent = revealed[i] ? secret[i] : '';
-    lettersEl.appendChild(slot);
-  }
-  renderGuessed();
-}
-
-/* Render guessed letters (alphabetical) */
-function renderGuessed(){
-  const arr = Array.from(guessed).sort();
-  guessedListEl.innerHTML = '';
-  for(const ch of arr){
-    const n = document.createElement('div');
-    n.className = 'guessed-letter';
-    n.textContent = ch;
-    guessedListEl.appendChild(n);
-  }
-}
-
-/* Pick a secret from BANK (avoid immediate repeat) */
-function pickSecret(){
-  if(BANK.length === 0) BANK = FALLBACK_BANK.slice(0,100);
-  let pool = BANK.slice();
-  if(lastSecret && pool.length > 1) pool = pool.filter(w => w !== lastSecret);
-  return pool[Math.floor(Math.random()*pool.length)];
-}
-
-/* Start new game */
-function startNewGame(){
-  secret = pickSecret().toUpperCase();
-  lastSecret = secret;
-  revealed = Array.from(secret).map(_=>false);
-  guessed = new Set();
-  wrong = 0;
-  ended = false;
-  hideAllPieces();
-  endBox.textContent = "";
-  render();
-  lettersEl.setAttribute('aria-label', `Hidden letters: ${secret.length} letters`);
-  guessedListEl.setAttribute('aria-label', 'Guessed letters (alphabetical)');
-}
-
-/* Handle guess (uppercase letter) */
-function handleGuess(letter){
-  if(ended) return;
-  if(!/^[A-Z]$/.test(letter)) return;
-  if(guessed.has(letter)) return;
-  guessed.add(letter);
-
-  let found = false;
-  for(let i=0;i<secret.length;i++){
-    if(secret[i] === letter){
-      revealed[i] = true;
-      found = true;
-    }
-  }
-  if(!found){
-    wrong++;
-    if(wrong >=1 && wrong <=6) revealPiece(wrong);
-  }
-  render();
-  checkEnd();
-}
-
-/* Check end conditions */
-function checkEnd(){
-  if(revealed.every(Boolean)){
-    ended = true;
-    endBox.textContent = "YOU WIN! PRESS ENTER TO PLAY AGAIN.";
-    return;
-  }
-  if(wrong >= 6){
-    ended = true;
-    endBox.textContent = `GAME OVER. THE WORD WAS: ${secret}. PRESS ENTER TO PLAY AGAIN.`;
-    // reveal all letters
-    for(let i=0;i<revealed.length;i++) revealed[i] = true;
+/* Start game */
+function newGame() {
+    secret = WORDS[Math.floor(Math.random() * WORDS.length)];
+    revealed = Array(secret.length).fill(false);
+    guessed.clear();
+    wrong = 0;
+    ended = false;
+    endMessage.textContent = "";
+    parts.forEach(p => p.setAttribute("visibility", "hidden"));
     render();
-    return;
-  }
 }
 
-/* Keyboard listener */
-window.addEventListener('keydown', (ev) => {
-  if(ended && ev.key === 'Enter'){ startNewGame(); return; }
-  if(ended) return;
-  if(ev.key && ev.key.length === 1 && /^[a-zA-Z]$/.test(ev.key)) handleGuess(ev.key.toUpperCase());
+/* Render letters and guessed box */
+function render() {
+    lettersArea.innerHTML = "";
+    for (let i = 0; i < secret.length; i++) {
+        const d = document.createElement("div");
+        d.className = "slot" + (revealed[i] ? " revealed" : "");
+        d.textContent = revealed[i] ? secret[i] : "";
+        lettersArea.appendChild(d);
+    }
+
+    guessedBox.innerHTML = "";
+    [...guessed].sort().forEach(ch => {
+        const g = document.createElement("div");
+        g.className = "gLetter";
+        g.textContent = ch;
+        guessedBox.appendChild(g);
+    });
+}
+
+/* Handle guess */
+function guess(letter) {
+    if (ended) return;
+    if (guessed.has(letter)) return;
+
+    guessed.add(letter);
+
+    let found = false;
+    for (let i = 0; i < secret.length; i++) {
+        if (secret[i] === letter) {
+            revealed[i] = true;
+            found = true;
+        }
+    }
+
+    if (!found) {
+        wrong++;
+        if (wrong <= 6) {
+            parts[wrong - 1].setAttribute("visibility", "visible");
+        }
+    }
+
+    render();
+    checkEnd();
+}
+
+/* Check win or lose */
+function checkEnd() {
+    if (revealed.every(v => v)) {
+        ended = true;
+        endMessage.textContent = "YOU WIN! PRESS ENTER TO PLAY AGAIN.";
+    } else if (wrong >= 6) {
+        ended = true;
+        endMessage.textContent = `GAME OVER. THE WORD WAS ${secret}. PRESS ENTER TO PLAY AGAIN.`;
+    }
+}
+
+/* Keyboard input */
+document.addEventListener("keydown", e => {
+    if (ended && e.key === "Enter") {
+        newGame();
+        return;
+    }
+    if (/^[a-zA-Z]$/.test(e.key)) {
+        guess(e.key.toUpperCase());
+    }
 });
 
-/* Build bank from fetched top-5000 text */
-async function buildBankFromTop5000(){
-  try {
-    const r = await fetch(TOP5000_RAW);
-    if(!r.ok) throw new Error('fetch failed ' + r.status);
-    const txt = await r.text();
-    // split into tokens containing letters only
-    const tokens = txt.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-    const words = [];
-    for(const ln of tokens){
-      // split on non-letter chars
-      const parts = ln.split(/[^A-Za-z]+/).filter(Boolean);
-      for(const p of parts){
-        const up = p.toUpperCase();
-        if(meetsConstraints(up)) words.push(up);
-      }
-    }
-    // dedupe while preserving order
-    const uniq = Array.from(new Set(words));
-    if(uniq.length < 100) return null;
-    shuffle(uniq);
-    return uniq.slice(0,100);
-  } catch(err){
-    console.warn('Top5000 fetch failed:', err);
-    return null;
-  }
-}
-
-/* Init: attempt to fetch and build bank, else fallback */
-(async function init(){
-  const fetchedBank = await buildBankFromTop5000();
-  if(fetchedBank && fetchedBank.length === 100){
-    BANK = fetchedBank;
-  } else {
-    BANK = FALLBACK_BANK.slice(0,100);
-  }
-  startNewGame();
-})();
+/* Start initial game */
+newGame();
 </script>
 </body>
 </html>

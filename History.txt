@@ -47,9 +47,13 @@ Trying more simple changes at a time. This time, just make the end of game appea
 letters. This worked, as expected, for when player wins or loses. I will commit and move one!
 
 
+version 6	4 minutes dev	1 minute code gen	2 minute test		1 hour 27 min total
+
+Same as last time, simple changes. Today, remove underlines for correctly guessed letters. First
+change worked!
+
+
 TODO increased words from 100 to 200. 
-TODO the underlines should go away after the letter there has been guessed.
-TODO the hidden letter spots move on correct guesses. I'd like them to stay in place.
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
 	with chrono
 

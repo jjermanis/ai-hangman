@@ -7,6 +7,7 @@ Create a single-page app in a single HTML file with the following requirements:
 - at the left of the screen is a hangman's hook
 - to  the right of the hangman's hook are where the hidden letters are shown. Each hidden letter is shown as an underline. The hidden letters should be shown on the same line, whenever possible. The line of hidden letters should be centered between the hangman's hook and the right edge of the screen. 
 - there is a box at the bottom of the screen. When letters are guessed, you see the letter in the box. All the letters that have been guessed are shown in that box. The letters that have been guessed are shown in alphabetical order.
+- when a player guesses a letter and guesses right, the underlines for the correct guess are removed, replaced by the correctly guess letter.
 - when a player guesses a letter and guesses wrong, add a piece to the hangman's hook. There are 6 pieces: head, body, left arm, right arm, left leg, and right leg.
 - when all 6 pieces are added, the game is over. Tell the user the game is over, and what the correct word is.
 - when the user guesses all the letters in the word, the game is over. Tell them that they won!
