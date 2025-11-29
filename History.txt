@@ -60,7 +60,15 @@ not easy! It would require follow-up questions, it would change the look and fee
 I had it generate code with 200 words, and pasted it to version 6.
 
 
-TODO a quick look contains some dubious Top 5000 words. ZIGZAGLY comes to mind. Fix, manually or AI?
+version 8	15 minutes dev	0 minute code gen	1 minute test		1 hour 57 min total
+
+Looking at the code, it looked like more than 200 words asked for last time. It was 323 words! Not
+bad mind you. I looked at the words. This next change was manually, but really, zero code. I did find
+a few words that we not legal (4 different letters; I asked for minimum of 5). I fixed that, and 
+combined some good words from 100 that were removed.
+
+
+TODO I asked for 6-10 letter words. These are in range, but do not appear even distribution at all. Check.
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
 	with chrono
 
