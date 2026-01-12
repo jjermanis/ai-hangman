@@ -67,10 +67,37 @@ bad mind you. I looked at the words. This next change was manually, but really, 
 a few words that we not legal (4 different letters; I asked for minimum of 5). I fixed that, and 
 combined some good words from 100 that were removed.
 
+Version 8 is release #1
 
-TODO I asked for 6-10 letter words. These are in range, but do not appear even distribution at all. Check.
+
+Version 9	22 minutes dev	2 minute code gen	9 minute test		2 hour 30
+
+Looking into this: "I asked for 6-10 letter words. These are in range, but do not appear even
+distribution at all. Check.". Here are the proportions
+6=>65
+7=>241
+8=>33
+9=>1
+10=>2
+That is way uneven. To start, I asked for 30 ten-letter words. A couple it created were not words,
+and first word had 9 letters. I simply asked it to create again. It took longer, but it created
+30, all of them 10-letters. 3 cases were odd words - 27 new words was good enough. I added the
+list in the code.
+I then asked for 9 letters. This provided a lot of plurals with an S at the end. I deleted quite
+a few of these. I added 23 of these words to the code.
+This put it in a better spot. 7-letter word still have the most, by far, but there is more balance.
+Will add some more 8 letter words, then evaluate. Will need to sort the words. We want to avoid
+duplicates (or very similar in place).
+
+
+
+TODO Add more 8-letter words
+TODO There have been words of different length added for balance. Check again.
+TODO Get all the words sorted. Will better help ID words that are very close already there.
+TODO Check how often rare letters appear. Some words should lead off and/or contain J, Q, X and Z
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
 	with chrono
+TODO some say the green is too bright. Adjust color to be a bit more mild. Just a bit.
 
 
 
