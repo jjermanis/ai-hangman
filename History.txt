@@ -90,11 +90,26 @@ Will add some more 8 letter words, then evaluate. Will need to sort the words. W
 duplicates (or very similar in place).
 
 
+Version 10	10 minutes dev	3 minute code gen	4 minute test		2 hour 47
 
-TODO Add more 8-letter words
+Continuing from the last version, added new 8-letter words. They went easily - came up with 30 
+words, no problem. Only one plural - for now I kept it, all 30. We are now up to a very nice
+total of 425 words. Had Chat rearrange the order of the initializer array of words in
+alphabetical order. I told it to retain all copies. Chat provided the list, which I applied.
+The new list had 423 words. I asked it to explain. It said it removed duplicates, and that
+is why I only had 423. I want duplicates there - I want to confirm the sort was done correctly.
+Later, I'll remove duplicates or close words. Chat confirmed I wanted it copied, keeping all 
+425. I did. It ran. The new list had 422. I asked to fix it again. It said that it could not
+do it as-is. It offered to provide code based on my JS code for me to run. I did not want to do 
+that: it would sort, but then I'd still have to solve the 80-character(-ish) line length. This
+was too much effort to lose two words that, keeping real, are likely duplicate.
+
+
+TODO Items are currently sorted. Check for duplicates or very close words.
 TODO There have been words of different length added for balance. Check again.
-TODO Get all the words sorted. Will better help ID words that are very close already there.
 TODO Check how often rare letters appear. Some words should lead off and/or contain J, Q, X and Z
+TODO The latest 8-letter word addition did all 30 words starting with A to E. Look for distribution
+	of lead words; add more to balance out more common starting letters as needed.
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
 	with chrono
 TODO some say the green is too bright. Adjust color to be a bit more mild. Just a bit.
