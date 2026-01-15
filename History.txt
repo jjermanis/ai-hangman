@@ -125,11 +125,24 @@ lots of words in that range was previously identified and on the TODO list. Also
 code to count words I left in, comment out. Easy to use when needed on other changes. 
 
 
+Version 12	10 minutes dev	2 minutes code		1 minute test	3 hour 11
+
+Add some proper nouns. Went for state names and their capitals. I made sure all
+followed the rules: one word, 6-10 characters, at least 5 unique letters. Here's where
+it got interesting. At a glance, it looked correct. Chat offered "cross-checked for
+Hangman difficulty". That has errors: it said COLORADO had 7 unique letters, when it
+really has 6. I let Chat know. It thanked me and provided more details to correct.
+That has errors: it said California had 7 unique errors; it has 8. I asked it to explain
+the algorithm was using. I was curious what it was. It provided it: create a Set and put
+each word into one. That does prevent duplicate counting, and this did work.
+I selected most states, and the highest profiles capitals (that match rules). This took
+the count up to 419.
+
+
 TODO There have been words of different length added for balance. Check again.
 TODO Check how often rare letters appear. Some words should lead off and/or contain J, Q, X and Z
 TODO The latest 8-letter word addition did all 30 words starting with A to E. Look for distribution
 	of lead words; add more to balance out more common starting letters as needed.
-TODO For a variety of words, add state names that are one word and fit the rules.
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
 	with chrono
 TODO some say the green is too bright. Adjust color to be a bit more mild. Just a bit.
