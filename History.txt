@@ -105,11 +105,31 @@ that: it would sort, but then I'd still have to solve the 80-character(-ish) lin
 was too much effort to lose two words that, keeping real, are likely duplicate.
 
 
-TODO Items are currently sorted. Check for duplicates or very close words.
+Version 11	10 minutes dev	0 minute code gen	1 minute test		2 hour 58
+
+Now that words are in sorted order, looking for duplicates or very close words. Got rid of
+CONTENT - it has nearly identical letters to CONTEXT; stuck with the later. Had DECISION 
+and DECIDE. Got rid of DECIDE - I noticed it broke the rule of at least 5 
+different letters. Got rid of double DELIVER, stuck with DELIVERY. Got rid of DEMOCRAT, stuck 
+with DEMOCRATIC. DEPARTMENT was duplicated; got rid of DEPART as similar. Got DEVELOP,
+DEVELOPED, and DEVELOPING - stuck with the last. DIFFER, DIFFERENCE, DIFFERENT -
+went with middle. ECONOMIC also had a plural - got rid of one. EMPLOYEE and EMPLOY -
+kept the longer one. GOVERN, GOVERNING, and GOVERNMENT - kept the last one. INCLUDE and 
+INCLUDING; kept the later. INCREASED and INCREASING; kept the first. INTEREST had plural -
+dropped that. MANAGED and MANAGEMENT, kept that later. OPERATE, OPERATING, OPERATIONS; a
+little different and kept the smallest version. STATEMENT has plural: removed plural.
+STRUCTURES was duplicated, removed one.
+Checking that (and fixing it) didn't take too long, based on the size. Removed 20 words were
+removed out of 423, so about 5%. I noticed that the words leaned toward those starting A to E;
+lots of words in that range was previously identified and on the TODO list. Also, the temp 
+code to count words I left in, comment out. Easy to use when needed on other changes. 
+
+
 TODO There have been words of different length added for balance. Check again.
 TODO Check how often rare letters appear. Some words should lead off and/or contain J, Q, X and Z
 TODO The latest 8-letter word addition did all 30 words starting with A to E. Look for distribution
 	of lead words; add more to balance out more common starting letters as needed.
+TODO For a variety of words, add state names that are one word and fit the rules.
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
 	with chrono
 TODO some say the green is too bright. Adjust color to be a bit more mild. Just a bit.
