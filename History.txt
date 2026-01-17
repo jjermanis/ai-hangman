@@ -139,10 +139,29 @@ I selected most states, and the highest profiles capitals (that match rules). Th
 the count up to 419.
 
 
+Version 14	14 minutes dev	1 minutes code		1 minute test
+
+Try the proportion of rare letters now. Both of these are easy to do manually.
+Words starting with...
+J -> 2
+Q -> 2 
+X -> 0
+Z -> 0
+Words containing...
+J -> 7
+Q -> 4 
+X -> 14
+Z -> 4
+I led off asking Chat about words with leads. I got 11 I like (or some, at least close):
+JACKET, JEALOUS, JEWELRY, JUNIOR, QUARTER, QUICKLY, QUIETLY, XENOPHOBE, ZEALOT, ZODIAC, ZOMBIE
+I also added some cases (12) where the word exists, not as the first letter:
+INJURED, REJECTED, MAJORITY, REQUEST, FREQUENT, EQUATOR, AQUATIC, CITIZEN, BLAZING, HORIZON, SEIZURE
+
+
 TODO There have been words of different length added for balance. Check again.
-TODO Check how often rare letters appear. Some words should lead off and/or contain J, Q, X and Z
 TODO The latest 8-letter word addition did all 30 words starting with A to E. Look for distribution
 	of lead words; add more to balance out more common starting letters as needed.
+	(K only has 3, Y only has 2)
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
 	with chrono
 TODO some say the green is too bright. Adjust color to be a bit more mild. Just a bit.
