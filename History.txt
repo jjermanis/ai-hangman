@@ -165,13 +165,32 @@ to find; it is separately defined in each section, but the color (with one excep
 green a bit, raised the blue even less. Maybe it'll help? We'll see.
 
 
+Version 16	16 minutes dev	7 minutes code		1 minute test	3 hour 59
+
+For this one, I wanted to analyze which starting letter do not match what their proportion is in English.
+This was easy: I asked Chat to provide the most common starting letters. It did, and followed up with
+asking if I wanted their comparison against usage in English. I did. It reported all the ratio,
+highlighting the following as shorted: T, W, O, B, and M. It said the words the were over represented 
+were: C, D, S, and P. I'll ignore the over represented, but I am going to populate the unders.
+Side note: it noticed that DEPARTMENT was duplicated doing this. I removed one.
+I asked for 25 common words starting with the letter T, 8 to 10 letters long. This worked well. To
+optimize to be addable quickly, I used this format:
+"I want you to provide for me 15 words that start with the letter W. The rules are the same
+as the other words. The words should be 8-10 letters. There should be at least 5 different 
+letters in each word. They should be a Top-5000 letter words. None of them should be repeats 
+from the array I just sent to you. Please send the words to me in alphabetical order. 
+Format putting double-quotes on each word. And a comma after each word."
+This was fast. I added 53 words at a fast speed.
+I ran the comparison again. At this point... OK obviously not perfect, but the proportion of
+starting letters in the game and in common usage are aligned. The one thing that remains outstanding
+is there are a lot more C's here. So be it - no need to remove to get to good. The proportions
+are solid now!
+
+
 TODO even in a game with 400+ words, I had the exact word repeated. Keep a cache to avoid repeats.
 	I think keeping a list of 200 words then emptying isn't perfect... but is easy an close
 	enough.
 TODO There have been words of different length added for balance. Check again.
-TODO The latest 8-letter word addition did all 30 words starting with A to E. Look for distribution
-	of lead words; add more to balance out more common starting letters as needed.
-	(K only has 3, Y only has 2)
 TODO add months of the year that meet rules
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
 	with chrono
