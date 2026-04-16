@@ -158,6 +158,9 @@ I also added some cases (12) where the word exists, not as the first letter:
 INJURED, REJECTED, MAJORITY, REQUEST, FREQUENT, EQUATOR, AQUATIC, CITIZEN, BLAZING, HORIZON, SEIZURE
 
 
+Version 14 is release #2
+
+
 Version 15	6 minutes dev	0 minutes code		2 minutes test	3 hour 35
 
 There were comments the screen is too bright, too glaring. How good is good enough. The color was easy
@@ -187,11 +190,24 @@ is there are a lot more C's here. So be it - no need to remove to get to good. T
 are solid now!
 
 
+Version 17	7 minutes dev	1 minutes code		1 minute test	4 hour 8
+
+Added somethings that are standard in my games now. Added the MIT License to the app,
+including in the UI. Added the favicon to the browser tab. For sure, I did not want
+to show the hangman noose. I went with a capital H, in the same color scheme as the 
+game.
+
+
+
 TODO even in a game with 400+ words, I had the exact word repeated. Keep a cache to avoid repeats.
 	I think keeping a list of 200 words then emptying isn't perfect... but is easy an close
 	enough.
+TODO support playing on mobile. Get a keyboard on the screen when needed. Maybe put a text box for
+	focus?
+TODO when mobile attempt is made, add a Mobile status to README
 TODO There have been words of different length added for balance. Check again.
-TODO add months of the year that meet rules
+TODO add months of the year that meet rules. Chat says: January, February, August, September, 
+	October, November, December
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
 	with chrono
 
