@@ -85,6 +85,26 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
         font-weight: bold;
     }
 
+    #keyboard {
+        display: none;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .key {
+        display: inline-block;
+        margin: 2px;
+        padding: 4px;
+        border: 1px solid #00FF00;
+        color: #00FF00;
+        background: black;
+        font-family: inherit;
+    }
+
+    .key.used {
+        opacity: 0.3;
+    }
+
     #endMessage {
         margin: 15px auto 0 auto;
         width: calc(100% - 40px);
@@ -138,6 +158,7 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
     <div id="lettersArea"></div>
 </div>
 
+<div id="keyboard"></div>
 <div id="guessedBox"></div>
 <div id="endMessage"></div>
 
@@ -241,6 +262,27 @@ const parts = [
     document.getElementById("p6")
 ];
 
+// SHOW KEYBOARD ON TOUCH DEVICES
+const kb = document.getElementById("keyboard");
+//if (true) {
+if ("ontouchstart" in window) {
+    kb.style.display = "block";
+}
+
+// BUILD KEYS
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
+    const k = document.createElement("div");
+    k.textContent = letter;
+    k.className = "key";
+
+    k.onclick = () => {
+        // simulate real keyboard input
+        document.dispatchEvent(new KeyboardEvent("keydown", { key: letter }));
+    };
+
+    kb.appendChild(k);
+});
+
 /* Start game */
 function newGame() {
     secret = WORDS[Math.floor(Math.random() * WORDS.length)];
@@ -249,6 +291,7 @@ function newGame() {
     wrong = 0;
     ended = false;
     endMessage.textContent = "";
+    document.querySelectorAll(".key").forEach(k => k.classList.remove("used"));
     parts.forEach(p => p.setAttribute("visibility", "hidden"));
     /* FOLLOWING used to count current words in WORDS */
     /* endMessage.textContent = WORDS.length; */
@@ -311,6 +354,14 @@ function checkEnd() {
     }
 }
 
+function markKey(letter) {
+    document.querySelectorAll(".key").forEach(k => {
+        if (k.textContent === letter) {
+            k.classList.add("used");
+        }
+    });
+}
+
 /* Keyboard input */
 document.addEventListener("keydown", e => {
     if (ended && e.key === "Enter") {
@@ -319,6 +370,7 @@ document.addEventListener("keydown", e => {
     }
     if (/^[a-zA-Z]$/.test(e.key)) {
         guess(e.key.toUpperCase());
+        markKey(letter);
     }
 });
 

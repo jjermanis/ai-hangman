@@ -1,10 +1,10 @@
-version 1	8 minute dev	<1 minute code gen	9 minute test		18 minutes total
+version 1	8 minute dev	<1 minute code 	9 minute test	18 minutes total
 
 Notes v1: there are a lot of elements present that I did not specify. The initial game was playable
 as-is. 
 
 
-version 2	4 minute dev	<1 minute code gen	6 minute test		29 minutes total
+version 2	4 minute dev	<1 minute code 	6 minute test	29 minutes total
 
 Issues changed: apparent typo. Says Commodore 64. Intended is Commodore PET.
 Issues changed: There are only 6-ish words. I want to add rules for the types of words that can be chosen.
@@ -17,7 +17,7 @@ This also added "press enter to play again" which I like... without prompt mind 
 2nd word was LONGERTHA! That for sure is not a top 5000 word... or a word at all?
 
 
-version 3	11 minute dev	3 minute code gen	6 minute test		49 minutes total
+version 3	11 minute dev	3 minute code	6 minute test	49 minutes total
 
 Issues changed: a lot! I did a restart of the ChatGPT session. I need to add a lot of detail to
 get it back to the original look. For truly new details, I ask for guessed letters to be shown
@@ -25,13 +25,13 @@ in alphabetical order, and to better lay out the guess letters.
 There are some changes to make, but this is very close.
 
 
-version 4	6 minutes dev	3 minute code gen	3 minute test		1 hour 1 min total
+version 4	6 minutes dev	3 minute code	3 minute test	1 hour 1 min total
 
 This was quick and easy... but minor. The lineup of the words is centered, both vertically and
 horizontally. It is good. Minor UI changes are made... it's the nature of the tool.
 
 
-version X	7 minutes dev	4 minute code gen	3 minute test		1 hour 15 min total
+version X	7 minutes dev	4 minute code	3 minute test	1 hour 15 min total
 
 DID NOT PROCEED - RETURNING TO VERSION 4 ON NEXT ATTEMPT
 Two changes. 1) increased words from 100 to 200. 2) move the end of the game UI below the guessed 
@@ -41,26 +41,26 @@ following question itself contained typos. I updated the word list to try again.
 it, and totally changed the UI. Reverted, and just updated the end of game UI.
 
 
-version 5	2 minutes dev	1 minute code gen	2 minute test		1 hour 20 min total
+version 5	2 minutes dev	1 minute code 	2 minute test	1 hour 20 min total
 
 Trying more simple changes at a time. This time, just make the end of game appear below the guessed
 letters. This worked, as expected, for when player wins or loses. I will commit and move one!
 
 
-version 6	4 minutes dev	1 minute code gen	2 minute test		1 hour 27 min total
+version 6	4 minutes dev	1 minute code	2 minute test	1 hour 27 min total
 
 Same as last time, simple changes. Today, remove underlines for correctly guessed letters. First
 change worked!
 
 
-version 7	8 minutes dev	3 minute code gen	3 minute test		1 hour 41 min total
+version 7	8 minutes dev	3 minute code	3 minute test	1 hour 41 min total
 
 Same as last time, a simple change. For this one, increase the list of 100 words to 200. This was 
 not easy! It would require follow-up questions, it would change the look and feel. Unnecessary.
 I had it generate code with 200 words, and pasted it to version 6.
 
 
-version 8	15 minutes dev	0 minute code gen	1 minute test		1 hour 57 min total
+version 8	15 minutes dev	0 minute code	1 minute test	1 hour 57 min total
 
 Looking at the code, it looked like more than 200 words asked for last time. It was 323 words! Not
 bad mind you. I looked at the words. This next change was manually, but really, zero code. I did find
@@ -70,7 +70,7 @@ combined some good words from 100 that were removed.
 Version 8 is release #1
 
 
-Version 9	22 minutes dev	2 minute code gen	9 minute test		2 hour 30
+Version 9	22 minutes dev	2 minute code	9 minute test	2 hour 30
 
 Looking into this: "I asked for 6-10 letter words. These are in range, but do not appear even
 distribution at all. Check.". Here are the proportions
@@ -90,7 +90,7 @@ Will add some more 8 letter words, then evaluate. Will need to sort the words. W
 duplicates (or very similar in place).
 
 
-Version 10	10 minutes dev	3 minute code gen	4 minute test		2 hour 47
+Version 10	10 minutes dev	3 minute code	4 minute test	2 hour 47
 
 Continuing from the last version, added new 8-letter words. They went easily - came up with 30 
 words, no problem. Only one plural - for now I kept it, all 30. We are now up to a very nice
@@ -105,7 +105,7 @@ that: it would sort, but then I'd still have to solve the 80-character(-ish) lin
 was too much effort to lose two words that, keeping real, are likely duplicate.
 
 
-Version 11	10 minutes dev	0 minute code gen	1 minute test		2 hour 58
+Version 11	10 minutes dev	0 minute code	1 minute test	2 hour 58
 
 Now that words are in sorted order, looking for duplicates or very close words. Got rid of
 CONTENT - it has nearly identical letters to CONTEXT; stuck with the later. Had DECISION 
@@ -125,7 +125,7 @@ lots of words in that range was previously identified and on the TODO list. Also
 code to count words I left in, comment out. Easy to use when needed on other changes. 
 
 
-Version 12	10 minutes dev	2 minutes code		1 minute test	3 hour 11
+Version 12	10 minutes dev	2 minutes code	1 minute test	3 hour 11
 
 Add some proper nouns. Went for state names and their capitals. I made sure all
 followed the rules: one word, 6-10 characters, at least 5 unique letters. Here's where
@@ -139,7 +139,7 @@ I selected most states, and the highest profiles capitals (that match rules). Th
 the count up to 419.
 
 
-Version 14	14 minutes dev	1 minutes code		1 minute test	 3 hour 27
+Version 14	14 minutes dev	1 minutes code	1 minute test	 3 hour 27
 
 Try the proportion of rare letters now. Both of these are easy to do manually.
 Words starting with...
@@ -161,14 +161,14 @@ INJURED, REJECTED, MAJORITY, REQUEST, FREQUENT, EQUATOR, AQUATIC, CITIZEN, BLAZI
 Version 14 is release #2
 
 
-Version 15	6 minutes dev	0 minutes code		2 minutes test	3 hour 35
+Version 15	6 minutes dev	0 minutes code	2 minutes test	3 hour 35
 
 There were comments the screen is too bright, too glaring. How good is good enough. The color was easy
 to find; it is separately defined in each section, but the color (with one exception is the same). Dropped
 green a bit, raised the blue even less. Maybe it'll help? We'll see.
 
 
-Version 16	16 minutes dev	7 minutes code		1 minute test	3 hour 59
+Version 16	16 minutes dev	7 minutes code	1 minute test	3 hour 59
 
 For this one, I wanted to analyze which starting letter do not match what their proportion is in English.
 This was easy: I asked Chat to provide the most common starting letters. It did, and followed up with
@@ -190,20 +190,33 @@ is there are a lot more C's here. So be it - no need to remove to get to good. T
 are solid now!
 
 
-Version 17	7 minutes dev	1 minutes code		1 minute test	4 hour 8
+Version 17	7 minutes dev	1 minute code	1 minute test	4 hour 8
 
-Added somethings that are standard in my games now. Added the MIT License to the app,
+Added some things that are standard in my games now. Added the MIT License to the app,
 including in the UI. Added the favicon to the browser tab. For sure, I did not want
 to show the hangman noose. I went with a capital H, in the same color scheme as the 
 game.
 
 
+Version 18	15 minutes	1 minute code	
 
+Added the visual keyboard on the screen for people playing on a mobile device. The format
+was basic: all 26 letters on keys, in a single row, in alphabetical order. The initial
+version didn't work; the second one did. Initially, I set this to always show the visual
+keyboard for testing. Eventually, I will switch over to only showing on mobile, after 
+testing. This does work on mobile! That said the keys are definitely small - one needs to 
+be very careful with their screen touch to hit the desired key. Also, when a game is over,
+it says (like it has) to hit Enter to play again. There is no Enter in mobile mode.
+
+
+TODO The visual keyboard doesn't have Enter, which is needed to start a new game. Need a
+	solution for that.
+TODO The visual keys are too small. Make them bigger, with more space between, Maybe move to
+	two rows?
+TODO Be sure to change the build to only show the visual keyboard on mobile when done testing.
 TODO even in a game with 400+ words, I had the exact word repeated. Keep a cache to avoid repeats.
 	I think keeping a list of 200 words then emptying isn't perfect... but is easy an close
 	enough.
-TODO support playing on mobile. Get a keyboard on the screen when needed. Maybe put a text box for
-	focus?
 TODO when mobile attempt is made, add a Mobile status to README
 TODO There have been words of different length added for balance. Check again.
 TODO add months of the year that meet rules. Chat says: January, February, August, September, 
