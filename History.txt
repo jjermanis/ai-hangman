@@ -198,7 +198,7 @@ to show the hangman noose. I went with a capital H, in the same color scheme as 
 game.
 
 
-Version 18	15 minutes	1 minute code	
+Version 18	15 minutes dev	1 minute code	1 minute test	4 hour 25
 
 Added the visual keyboard on the screen for people playing on a mobile device. The format
 was basic: all 26 letters on keys, in a single row, in alphabetical order. The initial
@@ -209,18 +209,30 @@ be very careful with their screen touch to hit the desired key. Also, when a gam
 it says (like it has) to hit Enter to play again. There is no Enter in mobile mode.
 
 
-TODO The visual keyboard doesn't have Enter, which is needed to start a new game. Need a
-	solution for that.
-TODO The visual keys are too small. Make them bigger, with more space between, Maybe move to
-	two rows?
+Version 19	20 minutes dev	2 minute code	2 minutes test	4 hour 49
+
+Addressed the two issues mentioned yesterday. Switched from a single row of 26 keys to
+two rows of 13. Made the keys larger with some space. This was easy and definitely
+worked well. Added an Enter button for the purpose of the mobile user. That ended up
+being difficult. Initially, I asked for a link to be shown/placed around Enter in the
+"PRESS ENTER TO PLAY AGAIN." quote. The initial did not work, two attempts to resolve
+did not work. Instead, just added a New Game button (on Mobile) when the game is over.
+
+
+
+TODO Add a Mobile status to README
+TODO The color on the mobile keys is different, a little dark. Switch to the same color used
+	in the game.
+TODO Make the offer to change the game color. Maybe add white? See if there is interest for
+	other colors?
+TODO add months of the year that meet rules. Chat says: January, February, August, September, 
+	October, November, DecemberTODO Be sure to change the build to only show the visual keyboard on mobile when done testing.
+TODO OPINION is a word that should be removed. There are only 4 different letters.
 TODO Be sure to change the build to only show the visual keyboard on mobile when done testing.
 TODO even in a game with 400+ words, I had the exact word repeated. Keep a cache to avoid repeats.
 	I think keeping a list of 200 words then emptying isn't perfect... but is easy an close
 	enough.
-TODO when mobile attempt is made, add a Mobile status to README
 TODO There have been words of different length added for balance. Check again.
-TODO add months of the year that meet rules. Chat says: January, February, August, September, 
-	October, November, December
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
 	with chrono
 
