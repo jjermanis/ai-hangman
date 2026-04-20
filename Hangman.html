@@ -96,17 +96,18 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
 
     .key {
         display: inline-block;
-        width: 28px;        /* wider tap target */
+        width: 28px;        
         margin: 6px;
         padding: 6px 0;
-        border: 1px solid #00FF00;
+        border: 1px solid currentcolor;
         color: inherit;
         background: black;
-        font-family: inherit;
+        opacity: 1;
+        font: inherit;
     }
 
     .key.used {
-        opacity: 0.3;
+        opacity: 0.5;
     }
 
     #endMessage {
@@ -117,25 +118,24 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
         font-size: 1.1rem;
     }
 
+    #newGameBtn {
+        display: none;
+        margin-top: 10px;
+        padding: 4px 10px;
+        border: 1px solid currentColor;
+        color: inherit;
+        background: black;
+        text-align: center;
+        cursor: pointer;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
 
-#newGameBtn {
-    display: none;
-    margin-top: 10px;
-    padding: 4px 10px;
-    border: 1px solid currentColor;
-    color: inherit;
-    background: black;
-    text-align: center;
-    cursor: pointer;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#newGameBtn:active {
-    background: currentColor;
-    color: black;
-}
+    #newGameBtn:active {
+        background: currentColor;
+        color: black;
+    }
 
   /* License MIT used in this file */
   #license {
@@ -189,14 +189,14 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
 
 <script>
 /* ------------------------------
-   494 COMMON, 6–10 LETTER WORDS
+   500 COMMON, 6–10 LETTER WORDS
    ------------------------------ */
 const WORDS = [
 "ABSOLUTE","ACADEMIC","ACCOUNT","ACCURATE","ACQUIRE","ACTIVITIES","ACTUALLY",
 "ADDRESS","ADDITIONAL","ADJUSTED","ADVICE","ADVANCED","ADVISORY","ALMOST","AMAZING",
 "AMOUNT","ANALYST","ANCIENT","ANNUALLY","ANYONE","ANXIETY","APPROACH","AQUATIC","ARGUMENT",
 "ARIZONA","AROUND","ARRIVE","ARTICLE","ASSESSOR","ASSOCIATED","ATHLETIC","ATTENTION",
-"ATTITUDE","AUTOMATE","AVAILABLE",
+"ATTITUDE","AUGUST","AUTOMATE","AVAILABLE",
 "BACKGROUND","BACKPACK","BALANCE","BANDWIDTH","BARRIER","BASEBALL","BATTERY","BEAUTIFUL",
 "BEGINNER","BEHAVIOR","BENEFACTOR","BENEFIT","BENEATH","BESIDES","BETWEEN","BLAZING",
 "BOOKSHELF","BOSTON","BOTTLE","BOUNDARY",
@@ -209,7 +209,7 @@ const WORDS = [
 "CONTAIN","CONTEXT","CONTRACT","CONTINUED","CONTROL","CONSUME",
 "CONVERT","CONVINCE","CORRECT","COUNTRY","COUPLE","COURAGE","COURSE","COVERED",
 "CREATOR","CRITICAL","CULTURAL","CURRENT","CUSTOMS","DAMAGE","DANGEROUS",
-"DEBATE","DECENT","DECISION","DECLARE","DECREASE","DEFINE","DEDICATE",
+"DEBATE","DECEMBER","DECENT","DECISION","DECLARE","DECREASE","DEFINE","DEDICATE",
 "DELAWARE","DELIVERY","DELIGHT","DEMOCRATIC","DENSITY",
 "DEPARTMENT","DEPOSIT","DESERT","DESIGN","DESIRE",
 "DETAILS","DETECTOR","DETERMINED","DEVELOPING","DEVICE",
@@ -219,7 +219,7 @@ const WORDS = [
 "ELEMENT","EMOTION","EMPIRE","EMPLOYEE","ENFORCE","ENJOYED","ENOUGH",
 "ENSURE","ENTIRE","EQUATOR","ERASED","EVIDENT","EVERYTHING","EXAMPLE","EXCITED","EXCLUDE",
 "EXPECT","EXPERIENCE","EXPERT","EXPLAIN","EXPLORE","EXTEND","EXTREME","FACTORY",
-"FAILURE","FASHION","FEATURE","FEELING","FELLOW","FEMALE","FICTION","FIGURE",
+"FAILURE","FASHION","FEATURE","FEBRUARY","FEELING","FELLOW","FEMALE","FICTION","FIGURE",
 "FINALLY","FINANCE","FINGER","FLORIDA","FOLLOWING","FOREIGN","FOREST","FORTUNE","FORWARD",
 "FOUNDATION","FREEDOM","FREQUENT","FRIENDS","FUNCTION","GALLERY","GARDENS","GENERAL",
 "GENETIC","GENUINE","GEORGIA","GOVERNMENT","GRADUAL","GRANTED",
@@ -227,7 +227,9 @@ const WORDS = [
 "HONESTY","HORIZON","HOSPITAL","HOUSING","HUMANITY","HUNTERS","IMAGINE","IMPACT","IMPOSED",
 "IMPULSE","IMPROVE","INCLUDING","INCREASED","INDIVIDUAL",
 "INDUSTRY","INITIAL","INJURED","INQUIRE","INSIGHT","INSPIRE","INTENSE","INTEREST",
-"INTERNAL","INVENT","INVOLVE","JACKET","JEALOUS","JEWELRY","JOURNAL","JUNIOR","JUSTICE","KENTUCKY","KITCHEN",
+"INTERNAL","INVENT","INVOLVE",
+"JACKET","JANUARY","JEALOUS","JEWELRY","JOURNAL","JUNIOR","JUSTICE",
+"KENTUCKY","KITCHEN",
 "KNOWLEDGE","LANGUAGE","LAUGHTER","LEARNER","LECTURE","LIBRARY","LIGHTLY",
 "LIMITED","LOOKING","LOUISIANA",
 "MACHINE","MAGAZINE","MAGNETISM","MAJORITY","MANAGEMENT","MARKETS","MARYLAND","MATERIAL",
@@ -235,10 +237,10 @@ const WORDS = [
 "MIDDLE","MIDNIGHT","MIGRATION","MINNESOTA","MIRACLE","MISLEADING","MISTAKE","MODERATELY",
 "MOMENT","MONITOR","MORNING","MOTION","MOTIVATED","MUSEUMS",
 "NARRATE","NASHVILLE","NATIVE","NATURAL","NEBRASKA",
-"NEITHER","NETWORK","NOTHING","NOTICE","NUMBER",
-"OBJECTS","OBLIGATED","OBSERVING","OBTAINING","OCCASIONAL","OCCUPYING","OFFICER",
+"NEITHER","NETWORK","NOTHING","NOTICE","NOVEMBER","NUMBER",
+"OBJECTS","OBLIGATED","OBSERVING","OBTAINING","OCCASIONAL","OCCUPYING","OCTOBER","OFFICER",
 "OFFSHORE","OPENING",
-"OPERATING","OPINION","OPTIMIZED","OPTIONS","ORGANIC","ORIGINALS","OUTREACH","OUTCOME",
+"OPERATING","OPTIMIZED","OPTIONS","ORGANIC","ORIGINALS","OUTREACH","OUTCOME",
 "OUTSIDE","OWNERSHIP",
 "PACKAGE","PAINTED","PASSAGE","PATIENT","PATTERN","PAYMENT","PERCENT",
 "PERFECT","PERHAPS","PHOENIX","PICTURE","PLANNER","PLASTIC","PLAYERS","PLEASE","POINTED",
@@ -248,7 +250,7 @@ const WORDS = [
 "RAILWAY","REACHES","READING","REALITY","RECEIVE","RECOGNIZED","RECORDS",
 "REFLECT","REGULAR","REJECTED","RELATED","RELATIVELY","REMEMBER","REQUEST","RESEARCH","RESPECT",
 "RESULTS","RETURN","REVIEW","ROUTINE","SACRAMENTO","SATISFY","SCHEDULE","SCHOOL","SCIENCE",
-"SECTION","SECTOR","SEIZURE","SENDING","SERVICE","SETTING","SHARING","SHORTLY","SILENCE",
+"SECTION","SECTOR","SEIZURE","SENDING","SEPTEMBER","SERVICE","SETTING","SHARING","SHORTLY","SILENCE",
 "SIMILAR","SIMPLE","SITUATE","SITUATION","SKETCH","SLEEPER","SOLIDLY",
 "SOLUTION","SOMETIME","SPEAKER","SPECIAL","STATION","STATEMENT",
 "STRUCTURES","STUDENT","SUBJECT","SUGGEST","SUPPLY","SUPPORT",

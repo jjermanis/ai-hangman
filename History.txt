@@ -219,15 +219,21 @@ being difficult. Initially, I asked for a link to be shown/placed around Enter i
 did not work. Instead, just added a New Game button (on Mobile) when the game is over.
 
 
+Version 20	7 minutes dev	0 minutes code	1 minute test	4 hour 57
+
+Small changes. The mobile keyboard was dim. Wanted to match existing colors, in particular
+to look the same as the guessed letters. Chat recommended minor changes to UI to get this
+done. It was quick and easy.
+Playing the game, I got the word OPINION. Words are supposed to have at least 5 distinct
+letters; that word has 4. Removed it. Super trivial.
+Added the months of the year to the words that follow the rules. That includes: January, 
+February, August, September, October, November, December. More time, still trivial.
+
+
 
 TODO Add a Mobile status to README
-TODO The color on the mobile keys is different, a little dark. Switch to the same color used
-	in the game.
 TODO Make the offer to change the game color. Maybe add white? See if there is interest for
 	other colors?
-TODO add months of the year that meet rules. Chat says: January, February, August, September, 
-	October, November, DecemberTODO Be sure to change the build to only show the visual keyboard on mobile when done testing.
-TODO OPINION is a word that should be removed. There are only 4 different letters.
 TODO Be sure to change the build to only show the visual keyboard on mobile when done testing.
 TODO even in a game with 400+ words, I had the exact word repeated. Keep a cache to avoid repeats.
 	I think keeping a list of 200 words then emptying isn't perfect... but is easy an close
