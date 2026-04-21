@@ -9,7 +9,8 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
 <style>
     body {
         background: black;
-        color: #22BB66; /* PET-green */
+        --main-color: #22BB66;  /* PET-green */
+        color: var(--main-color);
         font-family: "Courier New", Courier, monospace;
         text-transform: uppercase;
         margin: 0;
@@ -22,6 +23,39 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
         font-size: 2.4rem;
         letter-spacing: 0.25rem;
         margin-top: 15px;
+    }
+
+    #menuContainer {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        text-align: right;
+    }
+
+    #menuIcon {
+        cursor: pointer;
+        user-select: none;
+        font-size: 2em;
+    }
+
+    #menuDropdown {
+        display: none;
+        margin-top: 6px;
+        border: 1px solid currentColor;
+        padding: 6px;
+        background: black;
+    }
+
+    .menuTitle {
+        margin-bottom: 4px;
+    }
+
+    .menuItem {
+        cursor: pointer;
+    }
+
+    .menuItem:hover {
+        text-decoration: underline;
     }
 
     #main {
@@ -51,7 +85,7 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
     .slot {
         display: inline-block;
         min-width: 28px;
-        border-bottom: 2px solid #22BB66;
+        border-bottom: 2px solid currentcolor;
         margin: 0 6px;
         font-size: 1.6rem;
         text-align: center;
@@ -67,7 +101,7 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
         margin: 25px auto 0 auto;
         width: calc(100% - 40px);
         max-width: 1100px;
-        border: 2px solid #22BB66;
+        border: 2px solid currentcolor;
         padding: 10px;
         min-height: 45px;
         box-sizing: border-box;
@@ -79,7 +113,7 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
 
     .gLetter {
         padding: 4px 6px;
-        border: 1px solid #226f33;
+        border: 1px solid currentcolor;
         min-width: 22px;
         text-align: center;
         font-weight: bold;
@@ -160,14 +194,23 @@ href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 
 
 <div id="title">HANGMAN</div>
 
+<div id="menuContainer">
+    <div id="menuIcon">≡</div>
+    <div id="menuDropdown">
+        <div class="menuTitle">COLOR</div>
+        <div class="menuItem" data-color="#22BB66">GREEN</div>
+        <div class="menuItem" data-color="#DDDDDD">WHITE</div>
+    </div>
+</div>
+
 <div id="main">
     <div id="hookArea">
-        <svg width="180" height="260" stroke="#22BB66" fill="none" stroke-width="3">
+        <svg width="180" height="260" stroke="currentColor" fill="none" stroke-width="3">
             <!-- Hook -->
             <line x1="40" y1="10" x2="40" y2="230"/>
             <line x1="40" y1="10" x2="120" y2="10"/>
             <path d="M120 10 C140 35 100 45 100 70"/>
-            <circle cx="100" cy="70" r="4" fill="#22BB66"/>
+            <circle cx="100" cy="70" r="4" fill="currentColor"/>
 
             <!-- Hangman pieces -->
             <circle id="p1" cx="100" cy="95" r="18" visibility="hidden" />
@@ -297,6 +340,24 @@ const kb = document.getElementById("keyboard");
 if (IS_TOUCH) {
     kb.style.display = "block";
 }
+
+const menuIcon = document.getElementById("menuIcon");
+const menuDropdown = document.getElementById("menuDropdown");
+
+menuIcon.onclick = () => {
+    menuDropdown.style.display =
+        menuDropdown.style.display === "block" ? "none" : "block";
+};
+
+document.querySelectorAll(".menuItem").forEach(item => {
+    const color = item.getAttribute("data-color");
+    item.style.color = color;
+    item.onclick = () => {
+        const color = item.getAttribute("data-color");
+        document.body.style.setProperty('--main-color', color);
+        menuDropdown.style.display = "none";
+    };
+});
 
 // BUILD KEYS
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");

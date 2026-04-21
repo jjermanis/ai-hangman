@@ -230,11 +230,23 @@ Added the months of the year to the words that follow the rules. That includes: 
 February, August, September, October, November, December. More time, still trivial.
 
 
+Version 21	13 minutes dev	1 minute code	2 minutes test	5 hour 13
+
+In testing on iPad, one thing was requested. The color (Commodore PET Green) was a 
+little difficult to see on the mobile tablet. I added a drop-down menu to set the game 
+color to green or white. A drop-down menu was added the upper-right corner of the screen. 
+This was done and was fairly easy. There were two issues I saw. One: about half of the
+item colors changed when the drop-down changed. This was easy to resolve: some components
+used the global color definition, others used the same hard-coded RGB. Everything
+needed to switch - this was easy. There was still 1 remaining components: the box
+that appears around the guessed letters. That used a slightly different color. I
+switched that to the same color as everything else. Two: the icon for the drop-down
+menu was too small. That was also an easy change: needed to set the font-size to
+make it larger.
+
+
 
 TODO Add a Mobile status to README
-TODO Make the offer to change the game color. Maybe add white? See if there is interest for
-	other colors?
-TODO Be sure to change the build to only show the visual keyboard on mobile when done testing.
 TODO even in a game with 400+ words, I had the exact word repeated. Keep a cache to avoid repeats.
 	I think keeping a list of 200 words then emptying isn't perfect... but is easy an close
 	enough.
