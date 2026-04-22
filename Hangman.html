@@ -343,6 +343,7 @@ if (IS_TOUCH) {
 
 const menuIcon = document.getElementById("menuIcon");
 const menuDropdown = document.getElementById("menuDropdown");
+const usedWords = new Set();
 
 menuIcon.onclick = () => {
     menuDropdown.style.display =
@@ -382,10 +383,10 @@ const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
 /* Start game */
 function newGame() {
-    secret = WORDS[Math.floor(Math.random() * WORDS.length)];
+    secret = getRandomWord();
     revealed = Array(secret.length).fill(false);
     guessed.clear();
-document.getElementById("newGameBtn").style.display = "none";
+    document.getElementById("newGameBtn").style.display = "none";
     wrong = 0;
     ended = false;
     endMessage.textContent = "";
@@ -394,6 +395,20 @@ document.getElementById("newGameBtn").style.display = "none";
     /* FOLLOWING used to count current words in WORDS */
     /* endMessage.textContent = WORDS.length; */
     render();
+}
+
+function getRandomWord() {
+     if (usedWords.size >= 200) {
+        usedWords.clear();
+    }
+
+    let word;
+    do {
+        word = WORDS[Math.floor(Math.random() * WORDS.length)];
+    } while (usedWords.has(word));
+    usedWords.add(word);
+
+    return word;
 }
 
 /* Render letters and guessed box */

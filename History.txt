@@ -245,11 +245,17 @@ menu was too small. That was also an easy change: needed to set the font-size to
 make it larger.
 
 
+Version 22	8 minutes dev	0 minutes code	5 minutes test	5 hour 26
+
+There was an edge case that bothered me. Even if there are 500 words, it is possible to 
+get the same word repeating back-to-back... if not literally back-to-back, then close. 
+To help limit that, I added a Set of the words that were picked as the random word.
+When it picks a random word, it's added to the list. If the words is already in the
+list, a new one was chosen. The first attempt by Chat worked well.
+
+
 
 TODO Add a Mobile status to README
-TODO even in a game with 400+ words, I had the exact word repeated. Keep a cache to avoid repeats.
-	I think keeping a list of 200 words then emptying isn't perfect... but is easy an close
-	enough.
 TODO There have been words of different length added for balance. Check again.
 TODO some people like the guesses shown in alpha order. Some like chrono. Support switching; start
 	with chrono
