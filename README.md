@@ -22,14 +22,21 @@ If a guess does not match any letters, the hangman victim is built by one piece.
 
 If they guess all letters in word, the player wins.
 
+If you do not like the color used in the game, click on dropdown menu in the upper-right corner. You can choose a different color there.
 
 
 ## Details
 
-There are over 400 different words to guess in the game. Every word has 6 to 10 letters. There are at least 5 different letters used in each word. Words are all of reasonably common use (Top 5000 used). Most are common words; there are some proper (aka capitialized) nouns.
+There are 500 different words to guess in the game. Every word has 6 to 10 letters. There are at least 5 different letters used in each word. Words are all of reasonably common use (Top 5000 used). Most are common words; there are some proper (aka capitialized) nouns.
 
 
+## Mobile
 
+This game is supported on a mobile tablet. This game is playable, but with UI flaws, on a smartphone.
+
+When playing on a mobile device, a keyboard with the letter A to Z will appear to allow the player to make guesses. When the game is over (win or lose), there will be a visible button to press on the screen to start a new game.
+
+You can play on a smartphone. The screen size does not fit the game well. The keyboard might look odd. The letters you are guessing might not all be shown. It is playable; my apologies if you find it frustrating.
 
 
 ## From Release #1 (Build 8 on 11/28/25)
@@ -37,7 +44,6 @@ There are over 400 different words to guess in the game. Every word has 6 to 10 
 * Generated basic UI.
 
 * Contains 323 common words.
-
 
 
 ## From Release #2 (Build 14 on 2/4/26)
@@ -57,3 +63,17 @@ There are over 400 different words to guess in the game. Every word has 6 to 10 
 * Added some words for rare letters: J, Q, X, and Z.
 
 * Added some words for letters that had been less used than expected: B, M, O, T, and W.
+
+
+## From Release #3 (Build 22 on 4/22/26)
+
+* Added MIT License to UI.
+
+* Added a visual keyboard for mobile users.
+
+* Allowed ability to change the color used in the game.
+
+* Added a check to greatly reduce repeated random words from being used in the game.
+
+* Contains 500 words (common words and proper names)
+  
